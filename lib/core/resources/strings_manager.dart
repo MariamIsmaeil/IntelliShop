@@ -1,3 +1,3 @@
 abstract class StringsManager{
-  static String loginWelcome = 'Welcome Back To Route';
+  static String loginWelcome = 'Welcome Back To Intellige Shop';
 }
