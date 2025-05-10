@@ -16,6 +16,13 @@ class SignInDaoApiImpl extends SignInDao{
           "email":email,
           "password":password
         });
+        var responseData = response.data;
+      var modifiedResponse = {
+        "message": responseData["message"],
+        "statusMsg": responseData["status"] == true ? "success" : "fail",
+        "user": responseData["data"],
+        "token": responseData["token"]
+      };
         return Left(SignInResponse.fromJson(response.data));
       }catch(e){
         return Right(e.toString());

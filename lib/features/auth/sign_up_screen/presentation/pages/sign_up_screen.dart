@@ -27,7 +27,7 @@ class SignUpScreen extends StatefulWidget {
 class _SignUpScreenState extends State<SignUpScreen> {
   late TextEditingController nameController;
   late TextEditingController emailController;
-  late TextEditingController phoneController;
+  late TextEditingController confirmpasswordController;
   late TextEditingController passwordController;
   GlobalKey<FormState> formKey = GlobalKey<FormState>();
 
@@ -37,7 +37,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
     super.initState();
     nameController = TextEditingController();
     emailController = TextEditingController();
-    phoneController = TextEditingController();
+    confirmpasswordController = TextEditingController();
     passwordController = TextEditingController();
   }
 
@@ -47,8 +47,14 @@ class _SignUpScreenState extends State<SignUpScreen> {
     super.dispose();
     nameController.dispose();
     emailController.dispose();
-    phoneController.dispose();
+    confirmpasswordController.dispose();
     passwordController.dispose();
+  }
+  String? _validatePasswordMatch(String? value) {
+    if (value != passwordController.text) {
+      return 'Passwords do not match';
+    }
+    return null;
   }
 
   @override
@@ -103,17 +109,6 @@ class _SignUpScreenState extends State<SignUpScreen> {
                           height: AppSize.s18.h,
                         ),
                         BuildTextField(
-                          hint: 'enter your mobile no.',
-                          backgroundColor: ColorManager.white,
-                          label: 'Mobile Number',
-                          controller: phoneController,
-                          validation: AppValidators.validatePhoneNumber,
-                          textInputType: TextInputType.phone,
-                        ),
-                        SizedBox(
-                          height: AppSize.s18.h,
-                        ),
-                        BuildTextField(
                           hint: 'enter your email address',
                           backgroundColor: ColorManager.white,
                           label: 'E-mail address',
@@ -132,6 +127,16 @@ class _SignUpScreenState extends State<SignUpScreen> {
                           validation: AppValidators.validatePassword,
                           isObscured: true,
                           textInputType: TextInputType.text,
+                        ), SizedBox(
+                          height: AppSize.s18.h,
+                        ),
+                        BuildTextField(
+                          hint: 'confirm your password',
+                          backgroundColor: ColorManager.white,
+                          label: 'Confirm Password',
+                          controller: confirmpasswordController,
+                          validation: _validatePasswordMatch,
+                          textInputType: TextInputType.phone,
                         ),
                         SizedBox(
                           height: AppSize.s50.h,
@@ -153,7 +158,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
                                       name: nameController.text,
                                       email: emailController.text,
                                       password: passwordController.text,
-                                      phone: phoneController.text);
+                                      phone: "");
                                 }
                               },
                             ),

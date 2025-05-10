@@ -7,7 +7,7 @@ class AppConstants {
   static const String delete = "Delete";
   static const String searchHint = "what do you search for?";
   static const String addToCart = "Add to Cart";
-  static const String baseUrl = "https://ecommerce.routemisr.com";
+  static const String baseUrl = "https://beige-alligator-527710.hostingersite.com/public/api";
   static showToast(String message){
     Fluttertoast.showToast(
         msg: message,
