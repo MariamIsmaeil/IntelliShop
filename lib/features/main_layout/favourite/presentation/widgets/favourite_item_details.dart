@@ -21,7 +21,7 @@ class FavouriteItemDetails extends StatelessWidget {
       mainAxisAlignment: MainAxisAlignment.spaceEvenly,
       children: [
         CustomTextWgt(
-          data: product.title??"",
+          data: product.name??"",
           textStyle: getSemiBoldStyle(
               color: ColorManager.primaryDark, fontSize: AppSize.s18.sp),
         ),
@@ -51,7 +51,7 @@ class FavouriteItemDetails extends StatelessWidget {
                 letterSpacing: 0.17,
               ),
             ),
-            product.priceAfterDiscount == null
+            product.totalPrice == null
                 ? const SizedBox.shrink()
                 : Flexible(
                     child: Column(
@@ -61,7 +61,7 @@ class FavouriteItemDetails extends StatelessWidget {
                           height: AppSize.s10.h,
                         ),
                         CustomTextWgt(
-                            data: 'EGP ${product.priceAfterDiscount}',
+                            data: 'EGP ${product.totalPrice}',
                             textStyle: getMediumStyle(
                                     color: ColorManager.appBarTitleColor
                                         .withOpacity(.6))

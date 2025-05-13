@@ -45,7 +45,7 @@ class CartItemWidget extends StatelessWidget {
               border: Border.all(color: ColorManager.primary.withOpacity(0.3)),
             ),
             child: Image.network(
-              cartItemModel.product?.imageCover??"",
+              cartItemModel.product?.image??"",
               fit: BoxFit.cover,
               height: isPortrait ? height * 0.142 : height * 0.23,
               width: isPortrait ? width * 0.29 : 165.w,
@@ -69,7 +69,7 @@ class CartItemWidget extends StatelessWidget {
                     children: [
                       Expanded(
                         child: Text(
-                          cartItemModel.product?.title??"",
+                          cartItemModel.product?.name??"",
                           maxLines: 1,
                           overflow: TextOverflow.ellipsis,
                           style: getBoldStyle(

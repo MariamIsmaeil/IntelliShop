@@ -39,7 +39,7 @@ class FavoriteItem extends StatelessWidget {
                   width: AppSize.s120.w,
                   height: AppSize.s135.h,
                   fit: BoxFit.cover,
-                  imageUrl: product.imageCover??"",
+                  imageUrl: product.image??"",
                   placeholder: (context, url) => Center(
                     child: CircularProgressIndicator(
                       color: ColorManager.primary,

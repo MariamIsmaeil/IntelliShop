@@ -119,7 +119,7 @@ class CustomProductWidget extends StatelessWidget {
                         Flexible(
                           child: Text(
                             NumberFormat.compactCurrency(name: "EGP").format(
-                                product.priceAfterDiscount ?? product.price),
+                                product.price ?? product.price),
                             style: getRegularStyle(
                               color: ColorManager.textColor,
                               fontSize: 14.sp,
@@ -129,7 +129,7 @@ class CustomProductWidget extends StatelessWidget {
                         SizedBox(
                           width: 10.w,
                         ),
-                        if (product.priceAfterDiscount != null)
+                        if (product.price != null)
                           Text(
                             "${product.price} EGP",
                             style: getTextWithLine(),
@@ -140,26 +140,26 @@ class CustomProductWidget extends StatelessWidget {
                     Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
-                        SizedBox(
-                          // width: width * 0.22,
-                          child: Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            children: [
-                              Text(
-                                "Review (${product.ratingsAverage})",
-                                style: getRegularStyle(
-                                  color: ColorManager.textColor,
-                                  fontSize: 12.sp,
-                                ),
-                              ),
-                              const Icon(
-                                Icons.star_rate_rounded,
-                                color: ColorManager.starRateColor,
-                              ),
-                            ],
-                          ),
-                        ),
-                        const Spacer(),
+                        // SizedBox(
+                        //   // width: width * 0.22,
+                        //   child: Row(
+                        //     mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        //     children: [
+                        //       Text(
+                        //         "Review (${product.ratingsAverage})",
+                        //         style: getRegularStyle(
+                        //           color: ColorManager.textColor,
+                        //           fontSize: 12.sp,
+                        //         ),
+                        //       ),
+                        //       const Icon(
+                        //         Icons.star_rate_rounded,
+                        //         color: ColorManager.starRateColor,
+                        //       ),
+                        //     ],
+                        //   ),
+                        // ),
+                        // const Spacer(),
                         BlocConsumer<ProductsCubit, ProductsState>(
                           listenWhen: (previous, current) {
                             if (current is AddCartLoadingState ||
