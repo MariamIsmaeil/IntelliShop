@@ -12,5 +12,7 @@ class BrandEntity {
   String? name;
   String? image;
 
+  get logo_url => null;
+
 
 }

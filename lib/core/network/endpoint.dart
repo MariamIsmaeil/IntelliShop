@@ -10,11 +10,11 @@ class Endpoint {
   // Products Endpoints
   static const String productsEndpoint = "/products";
   static const String brandsEndpoint = "/brands";
-  // static String productByIdEndpoint(String id) => "/products/product/$id";
-  // static String productsByCategoryEndpoint(String categorySlug) => "/products/category/$categorySlug";
-  // static String productsBySubCategoryEndpoint(String categorySlug, String subCategorySlug) => 
-  //     "/products/category/$categorySlug/$subCategorySlug";
-  // static String productsByBrandEndpoint(String brandSlug) => "/products/brand/$brandSlug";
+   static String productByIdEndpoint(String id) => "/products/product/$id";
+   static String productsByCategoryEndpoint(String categorySlug) => "/products/category/$categorySlug";
+  static String productsBySubCategoryEndpoint(String categorySlug, String subCategorySlug) => 
+       "/products/category/$categorySlug/$subCategorySlug";
+  static String productsByBrandEndpoint(String brandSlug) => "/products/brand/$brandSlug";
   
   // Categories Endpoints
   static const String categoriesEndpoint = "/categories/get-categories";

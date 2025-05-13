@@ -8,90 +8,55 @@ import '../../../../../core/resources/color_manager.dart';
 import '../../../../../core/resources/styles_manager.dart';
 
 class CustomBrandWidget extends StatelessWidget {
-  BrandEntity brandEntity;
-  CustomBrandWidget({super.key,required this.brandEntity});
+  final BrandEntity brandEntity;
+  
+  const CustomBrandWidget({
+    super.key,
+    required this.brandEntity,
+  });
 
   @override
   Widget build(BuildContext context) {
     return Column(
+      mainAxisSize: MainAxisSize.min,
       children: [
-        CachedNetworkImage(
-          height: 100.h,
-          width: 100.w,
-          fit: BoxFit.cover,
-          imageUrl: brandEntity.image??"",
-          placeholder: (context, url) =>
-          const Center(child: CircularProgressIndicator()),
-          errorWidget: (context, url, error) =>
-              ClipOval(
-                child: Container(
-                  height: 100.h,
-                  width: 100.w,
-                  decoration: const BoxDecoration(
-                    shape: BoxShape.circle,
-                  ),
+        // صورة العلامة التجارية
+        Container(
+          width: 90.w,
+          height: 90.h,
+          decoration: BoxDecoration(
+            shape: BoxShape.circle,
+            image: brandEntity.image != null 
+                ? DecorationImage(
+                    image: CachedNetworkImageProvider(brandEntity.image!),
+                    fit: BoxFit.cover,
+                  )
+                : null,
+          ),
+          child: brandEntity.image == null
+              ? ClipOval(
                   child: Image.asset(
                     ImageAssets.categoryHomeImage,
                     fit: BoxFit.cover,
                   ),
-                ),
-              ),
-          imageBuilder: (context, imageProvider) {
-            return Container(
-              decoration: BoxDecoration(
-                shape: BoxShape.circle,
-                image: DecorationImage(
-                  image: imageProvider,
-                  fit: BoxFit.cover,
-                ),
-              ),
-            );
-          },
+                )
+              : null,
         ),
 
-        /*ClipRRect(
-          borderRadius: BorderRadius.circular(100.r),
-          child: Container(
-            height: 100.h,
-            width: 100.w,
-            decoration: const BoxDecoration(
-              shape: BoxShape.circle,
-            ),
-            child: Image.network(
-              category.image??"",
-              fit: BoxFit.cover,
+        SizedBox(height: 8.h),
+        Expanded(
+          child: Text(
+            brandEntity.name ?? "",
+            textAlign: TextAlign.center,
+            maxLines: 2,
+            overflow: TextOverflow.ellipsis,
+            style: getRegularStyle(
+              color: ColorManager.darkBlue, 
+              fontSize: 14.sp,
             ),
           ),
-        ),*/
-        SizedBox(height: 8.h),
-        Text(
-          brandEntity.name??"",
-          style: getRegularStyle(color: ColorManager.darkBlue, fontSize: 14.sp),
         ),
       ],
     );
   }
 }
-
-
-        // CachedNetworkImage(
-        //   height: 80,
-        //   width: 80,
-        //   fit: BoxFit.cover,
-        //   imageUrl: ImageAssets.categoryHomeImage,
-        //   placeholder: (context, url) =>
-        //       const Center(child: CircularProgressIndicator()),
-        //   errorWidget: (context, url, error) =>
-        //       const Center(child: Icon(Icons.error)),
-        //   imageBuilder: (context, imageProvider) {
-        //     return Container(
-        //       decoration: BoxDecoration(
-        //         shape: BoxShape.circle,
-        //         image: DecorationImage(
-        //           image: imageProvider,
-        //           fit: BoxFit.cover,
-        //         ),
-        //       ),
-        //     );
-        //   },
-        // ),

@@ -154,7 +154,10 @@ class _HomeTabState extends State<HomeTab> {
                         child: GridView.builder(
                           scrollDirection: Axis.horizontal,
                           itemBuilder: (context, index) {
-                            return CustomBrandWidget(brandEntity: state.brandsResponseEntity.data![index],);
+                            return Padding(
+                              padding: const EdgeInsets.all(8.0),
+                              child: CustomBrandWidget(brandEntity: state.brandsResponseEntity.data![index],),
+                            );
                           },
                           itemCount: state.brandsResponseEntity.data?.length??0,
                           gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(

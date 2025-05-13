@@ -1,52 +1,59 @@
 import 'package:ecommerce_app/features/main_layout/home/domain/entities/BrandsResponseEntity/BrandEntity.dart';
 
-/// _id : "64089fe824b25627a25315d1"
-/// name : "Canon"
-/// slug : "canon"
-/// image : "https://ecommerce.routemisr.com/Route-Academy-brands/1678286824747.png"
-/// createdAt : "2023-03-08T14:47:04.912Z"
-/// updatedAt : "2023-03-08T14:47:04.912Z"
-
 class BrandModel {
   BrandModel({
-      this.id, 
-      this.name, 
-      this.slug, 
-      this.image, 
-      this.createdAt, 
-      this.updatedAt,});
+    this.id, 
+    this.name, 
+    this.slug, 
+    this.description,
+    this.logoUrl, 
+    this.coverUrl,
+    this.status,
+    this.createdAt, 
+    this.updatedAt,
+  });
 
   BrandModel.fromJson(dynamic json) {
-    id = json['_id'];
+    id = json['id'];
     name = json['name'];
     slug = json['slug'];
-    image = json['image'];
-    createdAt = json['createdAt'];
-    updatedAt = json['updatedAt'];
+    description = json['description'];
+    logoUrl = json['logo_url'];
+    coverUrl = json['cover_url'];
+    status = json['status'];
+    createdAt = json['created_at'];
+    updatedAt = json['updated_at'];
   }
-  String? id;
+  
+  int? id;
   String? name;
   String? slug;
-  String? image;
+  String? description;
+  String? logoUrl;
+  String? coverUrl;
+  int? status;
   String? createdAt;
   String? updatedAt;
 
   Map<String, dynamic> toJson() {
     final map = <String, dynamic>{};
-    map['_id'] = id;
+    map['id'] = id;
     map['name'] = name;
     map['slug'] = slug;
-    map['image'] = image;
-    map['createdAt'] = createdAt;
-    map['updatedAt'] = updatedAt;
+    map['description'] = description;
+    map['logo_url'] = logoUrl;
+    map['cover_url'] = coverUrl;
+    map['status'] = status;
+    map['created_at'] = createdAt;
+    map['updated_at'] = updatedAt;
     return map;
   }
 
-  BrandEntity toBrandEntity(){
-    return BrandEntity(
-      name: name,
-      id: id,
-      image: image
-    );
-  }
+  BrandEntity toBrandEntity() {
+  return BrandEntity(
+    id: id.toString(),
+    name: name,
+    image: logoUrl, // هنا يتم تعيين logo_url إلى image
+  );
+}
 }
