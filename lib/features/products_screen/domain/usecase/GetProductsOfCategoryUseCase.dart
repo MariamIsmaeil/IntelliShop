@@ -9,5 +9,5 @@ class GetProductsOfCategoryUseCase{
   @factoryMethod
   GetProductsOfCategoryUseCase(this.repo);
 
-  Future<Either<ProductsResponseEntity, String>> call(String categoryId)=>repo.GetProductsFromCategory(categoryId);
+  Future<Either<ProductsResponseEntity, String>> call(String categorySlug)=>repo.GetProductsFromCategory(categorySlug);
 }

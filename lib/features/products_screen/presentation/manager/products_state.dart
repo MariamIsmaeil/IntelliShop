@@ -9,9 +9,13 @@ class ProductsErrorState extends ProductsState{
   String error;
   ProductsErrorState(this.error);
 }
-class ProductsSuccessState extends ProductsState{
-  ProductsResponseEntity productsResponseEntity;
+// Make sure your ProductsSuccessState has the products getter:
+class ProductsSuccessState extends ProductsState {
+  final ProductsResponseEntity productsResponseEntity;
+  
   ProductsSuccessState(this.productsResponseEntity);
+
+  List<ProductEntity> get products => productsResponseEntity.data ?? [];
 }
 
 class AddWishListLoadingState extends ProductsState{

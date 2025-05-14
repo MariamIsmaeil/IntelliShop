@@ -19,12 +19,12 @@ class ProductsScreen extends StatefulWidget {
 }
 
 class _ProductsScreenState extends State<ProductsScreen> {
-  @override
-  void initState() {
-    // TODO: implement initState
-    super.initState();
-    context.read<ProductsCubit>().GetProductsFromCategory(widget.categoryEntity.id??"");
-  }
+ @override
+void initState() {
+  super.initState();
+  context.read<ProductsCubit>().GetProductsFromCategory(widget.categoryEntity.slug ?? '');
+}
+
   @override
   Widget build(BuildContext context) {
 

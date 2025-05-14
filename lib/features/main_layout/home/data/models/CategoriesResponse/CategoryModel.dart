@@ -1,18 +1,13 @@
 import 'package:ecommerce_app/features/main_layout/home/domain/entities/CategoriesEntity/CategoriesEntity.dart';
 import 'package:ecommerce_app/features/main_layout/home/domain/entities/CategoriesEntity/CategoryEntity.dart';
 
-/// _id : "6439d61c0049ad0b52b90051"
-/// name : "Music"
-/// slug : "music"
-/// image : "https://ecommerce.routemisr.com/Route-Academy-categories/1681511964020.jpeg"
-/// createdAt : "2023-04-14T22:39:24.365Z"
-/// updatedAt : "2023-04-14T22:39:24.365Z"
+
 
 class CategoryModel {
   CategoryModel({
       this.id, 
       this.name, 
-      this.slug, 
+      required this.slug, 
       this.image, 
       this.createdAt, 
       this.updatedAt,});
@@ -20,14 +15,14 @@ class CategoryModel {
   CategoryModel.fromJson(dynamic json) {
     id = json['_id'];
     name = json['name'];
-    slug = json['slug'];
+    slug = json['slug']??'';
     image = json['image'];
     createdAt = json['createdAt'];
     updatedAt = json['updatedAt'];
   }
   String? id;
   String? name;
-  String? slug;
+ late String slug;
   String? image;
   String? createdAt;
   String? updatedAt;
@@ -47,7 +42,8 @@ class CategoryModel {
     return CategoryEntity(
       id: id,
       name: name,
-      image: image
+      image: image,
+      slug: slug,
     );
   }
 

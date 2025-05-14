@@ -17,46 +17,55 @@ class CustomBrandWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Column(
-      mainAxisSize: MainAxisSize.min,
-      children: [
-        // صورة العلامة التجارية
-        Container(
-          width: 90.w,
-          height: 90.h,
-          decoration: BoxDecoration(
-            shape: BoxShape.circle,
-            image: brandEntity.image != null 
-                ? DecorationImage(
-                    image: CachedNetworkImageProvider(brandEntity.image!),
-                    fit: BoxFit.cover,
+    return Container(
+      padding: EdgeInsets.symmetric(vertical: 8),
+      height: 350.h,
+            width: 120.w,
+      decoration: BoxDecoration(
+          borderRadius: BorderRadius.circular(16.r),
+          color: ColorManager.primary.withOpacity(0.2),
+          ),
+      child: Column(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          // صورة العلامة التجارية
+          Container(
+            width: 90,
+            height: 90,
+            decoration: BoxDecoration(
+              shape: BoxShape.circle,
+              image: brandEntity.image != null 
+                  ? DecorationImage(
+                      image: CachedNetworkImageProvider(brandEntity.image!),
+                      fit: BoxFit.cover,
+                    )
+                  : null,
+            ),
+            child: brandEntity.image == null
+                ? ClipOval(
+                    child: Image.asset(
+                      ImageAssets.categoryHomeImage,
+                      fit: BoxFit.cover,
+                    ),
                   )
                 : null,
           ),
-          child: brandEntity.image == null
-              ? ClipOval(
-                  child: Image.asset(
-                    ImageAssets.categoryHomeImage,
-                    fit: BoxFit.cover,
-                  ),
-                )
-              : null,
-        ),
-
-        SizedBox(height: 8.h),
-        Expanded(
-          child: Text(
-            brandEntity.name ?? "",
-            textAlign: TextAlign.center,
-            maxLines: 2,
-            overflow: TextOverflow.ellipsis,
-            style: getRegularStyle(
-              color: ColorManager.darkBlue, 
-              fontSize: 14.sp,
+      
+          SizedBox(height: 8.h),
+          Expanded(
+            child: Text(
+              brandEntity.name ?? "",
+              textAlign: TextAlign.center,
+              maxLines: 2,
+              overflow: TextOverflow.ellipsis,
+              style: getRegularStyle(
+                color: ColorManager.darkBlue, 
+                fontSize: 14.sp,
+              ),
             ),
           ),
-        ),
-      ],
+        ],
+      ),
     );
   }
 }

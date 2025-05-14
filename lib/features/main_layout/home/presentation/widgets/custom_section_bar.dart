@@ -31,7 +31,7 @@ class CustomSectionBar extends StatelessWidget {
             },
             child: Text(
               'view all',
-              style: getMediumStyle(color: ColorManager.darkBlue),
+              style: TextStyle(color: ColorManager.primary),
             ),
           ),
         ],

@@ -6,11 +6,12 @@ class BrandEntity {
   BrandEntity({
       this.id, 
       this.name, 
-      this.image,});
+      this.image, required this.slug,});
 
   String? id;
   String? name;
   String? image;
+  String slug;
 
   get logo_url => null;
 

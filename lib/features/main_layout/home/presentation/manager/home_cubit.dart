@@ -14,6 +14,7 @@ class HomeCubit extends Cubit<HomeState> {
 
   GetCategoriesUseCase getCategoriesUseCase;
   GetBrandsUseCase getBrandsUseCase;
+  
   GetCategories()async{
     emit(HomeCategoriesLoadingState());
     var result = await getCategoriesUseCase.call();

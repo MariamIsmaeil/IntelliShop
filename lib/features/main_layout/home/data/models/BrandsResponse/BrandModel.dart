@@ -4,7 +4,7 @@ class BrandModel {
   BrandModel({
     this.id, 
     this.name, 
-    this.slug, 
+    required this.slug, 
     this.description,
     this.logoUrl, 
     this.coverUrl,
@@ -27,7 +27,7 @@ class BrandModel {
   
   int? id;
   String? name;
-  String? slug;
+  late String slug;
   String? description;
   String? logoUrl;
   String? coverUrl;
@@ -53,7 +53,8 @@ class BrandModel {
   return BrandEntity(
     id: id.toString(),
     name: name,
-    image: logoUrl, // هنا يتم تعيين logo_url إلى image
+    image: logoUrl,
+    slug:slug // هنا يتم تعيين logo_url إلى image
   );
 }
 }

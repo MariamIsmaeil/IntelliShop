@@ -1,4 +1,6 @@
 import 'dart:async';
+import 'package:ecommerce_app/features/main_layout/brand/brands_list_screen.dart';
+import 'package:ecommerce_app/features/main_layout/categories/presentation/all_categories_screen.dart';
 import 'package:ecommerce_app/features/main_layout/home/presentation/manager/home_cubit.dart';
 import 'package:ecommerce_app/features/main_layout/home/presentation/widgets/custom_category_widget.dart';
 import 'package:flutter/material.dart';
@@ -54,129 +56,104 @@ class _HomeTabState extends State<HomeTab> {
     return BlocProvider(
       create: (context) => getIt<HomeCubit>()..GetCategories()..GetBrands(),
       child: SingleChildScrollView(
-        child: Column(
-          children: [
-            CustomAdsWidget(
-              adsImages: adsImages,
-              currentIndex: _currentIndex,
-              timer: _timer,
-            ),
-            Column(
-              children: [
-                CustomSectionBar(sectionNname: 'Categories', function: () {}),
-                BlocBuilder<HomeCubit, HomeState>(
-                  buildWhen:(previous, current) {
-                    if(current is HomeCategoriesLoadingState
-                    ||current is HomeCategoriesSuccessState
-                    || current is HomeCategoriesErrorState){
-                      return true;
-                    }
-                    return false;
-                  },
-                  builder: (context, state) {
-                    if(state is HomeCategoriesSuccessState){
-                      return SizedBox(
-                        height: 270.h,
-                        child: GridView.builder(
-                          scrollDirection: Axis.horizontal,
-                          itemBuilder: (context, index) {
-                            return CustomCategoryWidget(state.categoriesEntity.data![index]);
-                          },
-                          itemCount: state.categoriesEntity.data?.length??0,
-                          gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-                            crossAxisCount: 2,
-                          ),
-                        ),
-                      );
-                    }
-                    if(state is HomeCategoriesErrorState){
-                      return Center(child: Text(
-                        state.error
-                      ),);
-                    }
-                    return Center(child: CircularProgressIndicator(),);
-                  },
+        child: Padding(
+          padding: const EdgeInsets.all(8.0),
+          child: Column(
+            children: [
+              CustomAdsWidget(
+                adsImages: adsImages,
+                currentIndex: _currentIndex,
+                timer: _timer,
+              ),
+              Column(
+                children: [
+                  CustomSectionBar(sectionNname: 'Categories', function: () { Navigator.push(
+                context,
+                MaterialPageRoute(
+          builder: (context) => const AllCategoriesScreen(),
                 ),
-                // SizedBox(height: 12.h),
-                // CustomSectionBar(sectionNname: 'Brands', function: () {}),
-                // SizedBox(
-                //   height: 270.h,
-                //   child: GridView.builder(
-                //     scrollDirection: Axis.horizontal,
-                //     itemBuilder: (context, index) {
-                //       return const CustomBrandWidget();
-                //     },
-                //     itemCount: 20,
-                //     gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-                //       crossAxisCount: 2,
-                //     ),
-                //   ),
-                // ),
-                // CustomSectionBar(
-                //   sectionNname: 'Most Selling Products',
-                //   function: () {},
-                // ),
-                // SizedBox(
-                //   child: SizedBox(
-                //     height: 360.h,
-                //     child: ListView.builder(
-                //       scrollDirection: Axis.horizontal,
-                //       itemBuilder: (context, index) {
-                //         return const ProductCard(
-                //           title: "Nike Air Jordon",
-                //           description:
-                //               "Nike is a multinational corporation that designs, develops, and sells athletic footwear ,apparel, and accessories",
-                //           rating: 4.5,
-                //           price: 1100,
-                //           priceBeforeDiscound: 1500,
-                //           image: ImageAssets.categoryHomeImage,
-                //         );
-                //       },
-                //       itemCount: 20,
-                //     ),
-                //   ),
-                // ),
-                SizedBox(height: 12.h),
-                CustomSectionBar(sectionNname: 'Brands', function: () {}),
-                BlocBuilder<HomeCubit, HomeState>(
-                  buildWhen:(previous, current) {
-                    if(current is HomeBrandsLoadingState
-                        ||current is HomeBrandsSuccessState
-                        || current is HomeBrandsErrorState){
-                      return true;
-                    }
-                    return false;
-                  },
-                  builder: (context, state) {
-                    if(state is HomeBrandsSuccessState){
-                      return SizedBox(
-                        height: 270.h,
-                        child: GridView.builder(
-                          scrollDirection: Axis.horizontal,
-                          itemBuilder: (context, index) {
-                            return Padding(
-                              padding: const EdgeInsets.all(8.0),
-                              child: CustomBrandWidget(brandEntity: state.brandsResponseEntity.data![index],),
-                            );
-                          },
-                          itemCount: state.brandsResponseEntity.data?.length??0,
-                          gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-                            crossAxisCount: 2,
+              );}),
+                  BlocBuilder<HomeCubit, HomeState>(
+                    buildWhen:(previous, current) {
+                      if(current is HomeCategoriesLoadingState
+                      ||current is HomeCategoriesSuccessState
+                      || current is HomeCategoriesErrorState){
+                        return true;
+                      }
+                      return false;
+                    },
+                    builder: (context, state) {
+                      if(state is HomeCategoriesSuccessState){
+                        return SizedBox(
+                          height: 330.h,
+                          child: GridView.builder(
+                            scrollDirection: Axis.horizontal,
+                            itemBuilder: (context, index) {
+                              return CustomCategoryWidget(state.categoriesEntity.data![index],);
+                            },
+                            itemCount: state.categoriesEntity.data?.length??0,
+                            gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+                              crossAxisCount: 2,
+                              crossAxisSpacing: 15,
+                              mainAxisSpacing: 15,
+                            ),
                           ),
-                        ),
-                      );
-                    }
-                    if(state is HomeBrandsErrorState){
-                      return Center(child: Text(
+                        );
+                      }
+                      if(state is HomeCategoriesErrorState){
+                        return Center(child: Text(
                           state.error
-                      ),);
-                    }
-                    return Center(child: CircularProgressIndicator(),);
-                  },
+                        ),);
+                      }
+                      return Center(child: CircularProgressIndicator(),);
+                    },
+                  ),
+                  SizedBox(height: 5.h),
+                  CustomSectionBar(sectionNname: 'Brands', function: () {Navigator.push(
+                context,
+                MaterialPageRoute(
+          builder: (context) => const BrandsListScreen(),
                 ),
-              ],
-            )
-          ],
+              );}),
+                  BlocBuilder<HomeCubit, HomeState>(
+                    buildWhen:(previous, current) {
+                      if(current is HomeBrandsLoadingState
+                          ||current is HomeBrandsSuccessState
+                          || current is HomeBrandsErrorState){
+                        return true;
+                      }
+                      return false;
+                    },
+                    builder: (context, state) {
+                      if(state is HomeBrandsSuccessState){
+                        return SizedBox(
+                          height: 330.h,
+                          child: GridView.builder(
+                            scrollDirection: Axis.horizontal,
+                            itemBuilder: (context, index) {
+                              return CustomBrandWidget(brandEntity: state.brandsResponseEntity.data![index],);
+                            },
+                            itemCount: state.brandsResponseEntity.data?.length??0,
+                            gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+                              crossAxisCount: 2,
+                              crossAxisSpacing: 15,
+                              mainAxisSpacing: 15
+                            ),
+                          ),
+                        );
+                      }
+                      if(state is HomeBrandsErrorState){
+                        return Center(child: Text(
+                            state.error
+                        ),);
+                      }
+                      return Center(child: CircularProgressIndicator(),);
+                    },
+                  ),
+                ],
+              )
+            ],
+          ),
         ),
       ),
     );

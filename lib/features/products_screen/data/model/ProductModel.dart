@@ -48,7 +48,7 @@ class ProductModel {
   String? condition;
   String? discountInPercentage;
   double? totalPrice;
-  int? status;
+   String?status;
   BrandModel? brand;
   CategoryModel? category;
   String? createdAt;

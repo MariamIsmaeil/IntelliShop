@@ -1,6 +1,7 @@
 import 'package:bloc/bloc.dart';
 import 'package:ecommerce_app/features/products_screen/domain/entity/AddCartEntity/AddCartEntity.dart';
 import 'package:ecommerce_app/features/products_screen/domain/entity/AddWishlistEntity/AddWishlistEntity.dart';
+import 'package:ecommerce_app/features/products_screen/domain/entity/ProductEntity.dart';
 import 'package:ecommerce_app/features/products_screen/domain/entity/ProductsResponseEntity.dart';
 import 'package:ecommerce_app/features/products_screen/domain/usecase/AddToCartUseCase.dart';
 import 'package:ecommerce_app/features/products_screen/domain/usecase/AddToWishlistUseCase.dart';
@@ -18,9 +19,9 @@ class ProductsCubit extends Cubit<ProductsState> {
   GetProductsOfCategoryUseCase getProductsOfCategoryUseCase;
   AddToWishlistUseCase addToWishlistUseCase;
   AddToCartUseCase addToCartUseCase;
-  GetProductsFromCategory(String categoryId)async{
+  GetProductsFromCategory(String categorySlug)async{
     emit(ProductsLoadingState());
-    var result = await getProductsOfCategoryUseCase.call(categoryId);
+    var result = await getProductsOfCategoryUseCase.call(categorySlug);
     result.fold((response){
       emit(ProductsSuccessState(response));
     }, (error){

@@ -12,10 +12,10 @@ class ProductsRepoImpl extends ProductsRepo{
   @factoryMethod
   ProductsRepoImpl(this.apiDao);
   @override
-  Future<Either<ProductsResponseEntity, String>> GetProductsFromCategory(String categoryId) async{
+  Future<Either<ProductsResponseEntity, String>> GetProductsFromCategory(String categorySlug) async{
     bool isConnected = await InternetChecker.CheckNetwork();
     if(isConnected){
-      var result = await apiDao.GetProductsFromCategory(categoryId);
+      var result = await apiDao.GetProductsFromCategory(categorySlug);
       return result.fold((model){
         return Left(model.toProductsResponseEntity());
       }, (error){

@@ -4,7 +4,7 @@ import 'package:ecommerce_app/features/products_screen/domain/entity/AddWishlist
 import 'package:ecommerce_app/features/products_screen/domain/entity/ProductsResponseEntity.dart';
 
 abstract class ProductsRepo{
-  Future<Either<ProductsResponseEntity,String>> GetProductsFromCategory(String categoryId);
+  Future<Either<ProductsResponseEntity,String>> GetProductsFromCategory(String categorySlug);
   Future<Either<AddWishlistEntity,String>> AddToWishList(String id);
   Future<Either<AddCartEntity,String>> AddToCart(String id);
 }

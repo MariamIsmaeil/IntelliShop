@@ -17,10 +17,10 @@ class ProductsDaoApiImpl extends ProductsDao {
   ProductsDaoApiImpl(this.apiManager);
 
   @override
-  Future<Either<ProductsResponseModel, String>> GetProductsFromCategory(String categoryId) async {
+  Future<Either<ProductsResponseModel, String>> GetProductsFromCategory(String categorySlug) async {
     try {
       var response = await apiManager.GetRequest(
-        '${Endpoint.productsEndpoint}/category/$categoryId'
+        Endpoint.productsByCategoryEndpoint(categorySlug)
       );
       return Left(ProductsResponseModel.fromJson(response.data));
     } catch (error) {
