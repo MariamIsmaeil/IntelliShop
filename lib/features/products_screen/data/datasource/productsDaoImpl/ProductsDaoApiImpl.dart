@@ -34,7 +34,7 @@ class ProductsDaoApiImpl extends ProductsDao {
       var response = await apiManager.PostRequestRawData(
         Endpoint.wishlistEndpoint,
         body: {"productId": id},
-        headers: {"token": PrefsHandler.getToken()}
+        // headers: {"token": PrefsHandler.getToken()}
       );
       return Left(AddWishlistModel.fromJson(response.data));
     } catch (error) {
@@ -43,14 +43,14 @@ class ProductsDaoApiImpl extends ProductsDao {
   }
 
   @override
-  Future<Either<AddCartModel, String>> AddToCart(String id) async {
+  Future<Either<AddToCartResponseModel, String>> AddToCart(String id) async {
     try {
       var response = await apiManager.PostRequestRawData(
         Endpoint.cartEndpoint,
         body: {"productId": id},
-        headers: {"token": PrefsHandler.getToken()}
+        // headers: {"token": PrefsHandler.getToken()}
       );
-      return Left(AddCartModel.fromJson(response.data));
+      return Left(AddToCartResponseModel.fromJson(response.data));
     } catch (error) {
       return Right(error.toString());
     }

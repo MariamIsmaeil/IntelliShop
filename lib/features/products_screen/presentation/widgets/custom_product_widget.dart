@@ -216,7 +216,7 @@ class CustomProductWidget extends StatelessWidget {
                               child: InkWell(
                                 onTap: () {
                                   ProductsCubit.get(context)
-                                      .AddProductToCart(product.id!);
+                                      .AddProductToCart(product.id!,product.quantity?.toString() ?? "1" );
                                 },
                                 child: Container(
                                   height: 24.h,

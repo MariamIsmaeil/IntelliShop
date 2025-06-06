@@ -11,14 +11,14 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/svg.dart';
 
 class HomeScreenAppBar extends StatelessWidget implements PreferredSizeWidget {
- final bool? automaticallyImplyLeading;
+  final bool? automaticallyImplyLeading;
   const HomeScreenAppBar({super.key, this.automaticallyImplyLeading});
 
   @override
   Widget build(BuildContext context) {
     return AppBar(
       surfaceTintColor: Colors.white,
-      automaticallyImplyLeading: automaticallyImplyLeading??false,
+      automaticallyImplyLeading: automaticallyImplyLeading ?? false,
       // title: SvgPicture.asset(
       //   SvgAssets.routeLogo,
       //   height: 25.h,
@@ -26,17 +26,19 @@ class HomeScreenAppBar extends StatelessWidget implements PreferredSizeWidget {
       //   colorFilter:
       //       const ColorFilter.mode(ColorManager.textColor, BlendMode.srcIn),
       // ),
-      title: Text("Intellige Shop",style: TextStyle(color: ColorManager.primary),),
+      title: Text(
+        "Intellige Shop",
+        style: TextStyle(color: ColorManager.primary),
+      ),
       actions: [
         IconButton(
-            onPressed: (){
+            onPressed: () {
               PrefsHandler.clearToken();
               AppConstants.showToast("Logged out");
-              Navigator.pushNamedAndRemoveUntil(context, Routes.signInRoute, (route) => false);
+              Navigator.pushNamedAndRemoveUntil(
+                  context, Routes.signInRoute, (route) => false);
             },
-            icon: Icon(
-              Icons.logout
-            ))
+            icon: Icon(Icons.logout))
       ],
       bottom: PreferredSize(
           preferredSize: const Size(AppSize.s100, AppSize.s60),
@@ -84,12 +86,15 @@ class HomeScreenAppBar extends StatelessWidget implements PreferredSizeWidget {
                   ),
                 ),
                 IconButton(
-                    onPressed: () =>
-                        Navigator.pushNamed(context, Routes.cartRoute),
-                    icon: ImageIcon(
-                      AssetImage(IconsAssets.icCart),
-                      color: ColorManager.primary,
-                    ))
+                  onPressed: () {
+                    print('Saved token: ${PrefsHandler.getToken()}');
+                    Navigator.pushNamed(context, Routes.cartRoute);
+                  },
+                  icon: ImageIcon(
+                    AssetImage(IconsAssets.icCart),
+                    color: ColorManager.primary,
+                  ),
+                ),
               ],
             ),
           )),

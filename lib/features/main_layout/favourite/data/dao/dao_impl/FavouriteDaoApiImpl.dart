@@ -14,9 +14,11 @@ class FavouriteDaoApiImpl extends FavouriteDao{
   @override
   Future<Either<GetWishlistResponse, String>> GetFavourites() async{
     try{
-      var response = await apiManager.GetRequest(Endpoint.wishlistEndpoint,headers: {
-        "token":PrefsHandler.getToken()
-      });
+      var response = await apiManager.GetRequest(Endpoint.wishlistEndpoint,
+      // headers: {
+      //   "token":PrefsHandler.getToken()
+      // }
+      );
       return Left(GetWishlistResponse.fromJson(response.data));
     }catch(e){
       return Right(e.toString());

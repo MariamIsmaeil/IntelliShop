@@ -2,29 +2,31 @@ import 'package:ecommerce_app/features/main_layout/home/domain/entities/BrandsRe
 
 class BrandModel {
   BrandModel({
-    this.id, 
-    this.name, 
-    required this.slug, 
+    this.id,
+    this.name,
+    required this.slug,
     this.description,
-    this.logoUrl, 
+    this.logoUrl,
     this.coverUrl,
     this.status,
-    this.createdAt, 
+    this.createdAt,
     this.updatedAt,
   });
 
-  BrandModel.fromJson(dynamic json) {
-    id = json['id'];
-    name = json['name'];
-    slug = json['slug'];
-    description = json['description'];
-    logoUrl = json['logo_url'];
-    coverUrl = json['cover_url'];
-    status = json['status'];
-    createdAt = json['created_at'];
-    updatedAt = json['updated_at'];
+  factory BrandModel.fromJson(dynamic json) {
+    return BrandModel(
+      id: json['id'],
+      name: json['name'],
+      slug: json['slug'],
+      description: json['description'],
+      logoUrl: json['logo_url'],
+      coverUrl: json['cover_url'],
+      status: json['status'],
+      createdAt: json['created_at'],
+      updatedAt: json['updated_at'],
+    );
   }
-  
+
   int? id;
   String? name;
   late String slug;
@@ -50,11 +52,11 @@ class BrandModel {
   }
 
   BrandEntity toBrandEntity() {
-  return BrandEntity(
-    id: id.toString(),
-    name: name,
-    image: logoUrl,
-    slug:slug // هنا يتم تعيين logo_url إلى image
-  );
-}
+    return BrandEntity(
+        id: id.toString(),
+        name: name,
+        image: logoUrl,
+        slug: slug // هنا يتم تعيين logo_url إلى image
+        );
+  }
 }

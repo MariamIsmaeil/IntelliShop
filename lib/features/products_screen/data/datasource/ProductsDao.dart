@@ -6,5 +6,5 @@ import 'package:ecommerce_app/features/products_screen/data/model/ProductsRespon
 abstract class ProductsDao{
   Future<Either<ProductsResponseModel,String>> GetProductsFromCategory(String categorySlug);
   Future<Either<AddWishlistModel,String>> AddToWishList(String id);
-  Future<Either<AddCartModel,String>> AddToCart(String id);
+  Future<Either<AddToCartResponseModel,String>> AddToCart(String id);
 }

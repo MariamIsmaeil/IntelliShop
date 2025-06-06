@@ -39,15 +39,19 @@ class ProductsCubit extends Cubit<ProductsState> {
     });
   }
 
-  AddProductToCart(String id)async{
-    emit(AddCartLoadingState(id));
-    var result = await addToCartUseCase.call(id);
-    result.fold((addCartEntity){
-      emit(AddCartSuccessState(addCartEntity,id));
-    }, (error){
-      emit(AddCartErrorState(error,id));
-    });
-  }
+  AddProductToCart(String id, String quantity) async {
+  emit(AddCartLoadingState(id));
+
+  var result = await addToCartUseCase.call(id, quantity);
+
+  result.fold((responseModel) {
+    final entity = responseModel.toCartEntity();
+    emit(AddCartSuccessState(entity, id));
+  }, (error) {
+    emit(AddCartErrorState(error, id));
+  });
+}
+
 
 
 }

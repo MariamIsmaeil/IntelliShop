@@ -8,50 +8,26 @@ import 'CartitemModel.dart';
 /// __v : 0
 /// totalCartPrice : 510
 
-class CartModel {
-  CartModel({
-      this.id, 
-      this.cartOwner, 
-      this.products, 
-      this.createdAt, 
-      this.updatedAt, 
-      this.v, 
-      this.totalCartPrice,});
+class CartResponseModel {
+  final bool status;
+  final String message;
+  final List<CartItemModel>? items;
 
-  CartModel.fromJson(dynamic json) {
-    id = json['_id'];
-    cartOwner = json['cartOwner'];
-    if (json['products'] != null) {
-      products = [];
-      json['products'].forEach((v) {
-        products?.add(CartItemModel.fromJson(v));
-      });
-    }
-    createdAt = json['createdAt'];
-    updatedAt = json['updatedAt'];
-    v = json['__v'];
-    totalCartPrice = json['totalCartPrice'];
-  }
-  String? id;
-  String? cartOwner;
-  List<CartItemModel>? products;
-  String? createdAt;
-  String? updatedAt;
-  num? v;
-  num? totalCartPrice;
+  CartResponseModel({
+    required this.status,
+    required this.message,
+    this.items,
+  });
 
-  Map<String, dynamic> toJson() {
-    final map = <String, dynamic>{};
-    map['_id'] = id;
-    map['cartOwner'] = cartOwner;
-    if (products != null) {
-      map['products'] = products?.map((v) => v.toJson()).toList();
-    }
-    map['createdAt'] = createdAt;
-    map['updatedAt'] = updatedAt;
-    map['__v'] = v;
-    map['totalCartPrice'] = totalCartPrice;
-    return map;
-  }
+  factory CartResponseModel.fromJson(Map<String, dynamic> json) {
+  return CartResponseModel(
+    status: json['status'],
+    message: json['message'],
+    items: json['data'] != null && json['data']['items'] != null
+        ? List<CartItemModel>.from(
+            json['data']['items'].map((x) => CartItemModel.fromJson(x)))
+        : null,
+  );
+}
 
 }

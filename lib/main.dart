@@ -14,13 +14,19 @@ import 'features/products_screen/presentation/manager/products_cubit.dart';
 void main() async{
   WidgetsFlutterBinding.ensureInitialized();
   configureDependencies();
-  ApiManager.init();
-  Bloc.observer = MyBlocObserver();
+  
   await PrefsHandler.init();
+
+  ApiManager.init();
+  await PrefsHandler.setToken("test_token_123");
+  print("Saved token: ${PrefsHandler.getToken()}");
+  Bloc.observer = MyBlocObserver();
+
   runApp(BlocProvider(
       create: (context) => getIt<ProductsCubit>(),
       child: const MainApp()));
 }
+
 
 class MainApp extends StatelessWidget {
   const MainApp({super.key});

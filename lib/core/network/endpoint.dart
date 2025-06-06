@@ -22,6 +22,7 @@ class Endpoint {
   static String subCategoriesEndPoint(String categoryId) => "/categories/categories/$categoryId";
   static const String wishlistEndpoint = "/wishlist";
   static const String cartEndpoint = "/cart";
+
   
 
 }

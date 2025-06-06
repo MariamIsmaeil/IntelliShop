@@ -17,7 +17,7 @@ class CartScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return BlocProvider(
-      create: (context) => getIt<CartCubit>()..GetCart(),
+      create: (context) => getIt<CartCubit>()..getCart(),
       child: Scaffold(
         appBar: AppBar(
           title: Text(
@@ -29,9 +29,7 @@ class CartScreen extends StatelessWidget {
             IconButton(
               onPressed: () {},
               icon: ImageIcon(
-                AssetImage(
-                  IconsAssets.icSearch,
-                ),
+                AssetImage(IconsAssets.icSearch),
                 color: ColorManager.primary,
               ),
             ),
@@ -44,42 +42,45 @@ class CartScreen extends StatelessWidget {
             ),
           ],
         ),
-        body: BlocBuilder<CartCubit,CartState>(
-            builder: (context, state) {
-              if(state is CartSuccessState){
-                return Padding(
-                  padding: const EdgeInsets.all(AppPadding.p14),
-                  child: Column(
-                    children: [
-                      Expanded(
-                        // the list of cart items ===============
-                        child: ListView.separated(
-                          itemBuilder: (context, index) => CartItemWidget(
-                            onDeleteTap: () {},
-                            onDecrementTap: (value) {},
-                            onIncrementTap: (value) {},
-                            cartItemModel:state.cart.data!.products![index] ,
-                          ),
-                          separatorBuilder: (context, index) =>
-                              SizedBox(height: AppSize.s12.h),
-                          itemCount: state.cart.data?.products?.length??0,
+        body: BlocBuilder<CartCubit, CartState>(
+          builder: (context, state) {
+            if (state is CartSuccessState) {
+              final cartItems = state.cart.items ?? [];
+              final total = cartItems.fold(0.0, (sum, item) => sum + item.total);
+              
+              return Padding(
+                padding: const EdgeInsets.all(AppPadding.p14),
+                child: Column(
+                  children: [
+                    Expanded(
+                      child: ListView.separated(
+                        itemBuilder: (context, index) => CartItemWidget(
+                          onDeleteTap: () => CartCubit.get(context)
+                            .removeFromCart(cartItems[index].product!.id.toString()),
+                          onDecrementTap: (value) => CartCubit.get(context)
+                            .addToCart(cartItems[index].product!.id.toString(), (cartItems[index].quantity - 1).toString()),
+                          onIncrementTap: (value) => CartCubit.get(context)
+                            .addToCart(cartItems[index].product!.id.toString(), (cartItems[index].quantity + 1).toString()),
+                          cartItem: cartItems[index],
                         ),
+                        separatorBuilder: (context, index) => SizedBox(height: AppSize.s12.h),
+                        itemCount: cartItems.length,
                       ),
-                      // the total price and checkout button========
-                      TotalPriceAndCheckoutBotton(
-                        totalPrice: (state.cart.data?.totalCartPrice??0).toInt(),
-                        checkoutButtonOnTap: () {},
-                      ),
-                      SizedBox(height: 10.h),
-                    ],
-                  ),
-                );
-              }
-              if(state is CartErrorState){
-                return Center(child: Text(state.error),);
-              }
-              return Center(child: CircularProgressIndicator(),);
-            },
+                    ),
+                    TotalPriceAndCheckoutBotton(
+                      totalPrice: total.toInt(),
+                      checkoutButtonOnTap: () {},
+                    ),
+                    SizedBox(height: 10.h),
+                  ],
+                ),
+              );
+            }
+            if (state is CartErrorState) {
+              return Center(child: Text(state.error));
+            }
+            return Center(child: CircularProgressIndicator());
+          },
         ),
       ),
     );
