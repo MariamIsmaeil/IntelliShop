@@ -60,4 +60,12 @@ class ApiManager {
       options: Options(headers: headers),
     );
   }
+  Future<Response> DeleteRequest(String endpoint,
+    {Map<String, dynamic>? headers}) {
+  return dio.delete(
+    endpoint,
+    options: Options(headers: headers),
+  );
+}
+
 }

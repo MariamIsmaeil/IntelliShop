@@ -6,5 +6,6 @@ import 'package:ecommerce_app/features/products_screen/domain/entity/ProductsRes
 abstract class ProductsRepo{
   Future<Either<ProductsResponseEntity,String>> GetProductsFromCategory(String categorySlug);
   Future<Either<AddWishlistEntity,String>> AddToWishList(String id);
+  Future<Either<removeFromWishlistEntity,String>> RemoveFromWishList(String id);
   Future<Either<AddCartEntity,String>> AddToCart(String id);
 }

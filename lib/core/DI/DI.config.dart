@@ -169,6 +169,8 @@ extension GetItInjectableX on _i1.GetIt {
         ));
     gh.factory<_i46.AddToWishlistUseCase>(
         () => _i46.AddToWishlistUseCase(gh<_i36.ProductsRepo>()));
+    gh.factory<_i46.RemoveFromWishlistUseCase>(
+        () => _i46.RemoveFromWishlistUseCase(gh<_i36.ProductsRepo>()));
     gh.factory<_i47.GetProductsOfCategoryUseCase>(
         () => _i47.GetProductsOfCategoryUseCase(gh<_i36.ProductsRepo>()));
     gh.factory<_i48.CategoriesCubit>(() => _i48.CategoriesCubit(
@@ -181,6 +183,7 @@ extension GetItInjectableX on _i1.GetIt {
           gh<_i25.AddToCartUseCase>(),
           gh<_i47.GetProductsOfCategoryUseCase>(),
           gh<_i46.AddToWishlistUseCase>(),
+          gh<_i46.RemoveFromWishlistUseCase>(),
         ));
     return this;
   }

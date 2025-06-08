@@ -258,4 +258,4 @@ class CustomProductWidget extends StatelessWidget {
       ),
     );
   }
-}
+} 

@@ -29,23 +29,23 @@ class ProductsRepoImpl extends ProductsRepo {
   }
 
   @override
-  Future<Either<AddWishlistEntity, String>> AddToWishList(String id) async {
-    bool isConnected = await InternetChecker.CheckNetwork();
-    if (isConnected) {
-      var result = await apiDao.AddToWishList(id);
-      return result.fold((model) {
-        if (model.statusMsg != null) {
-          return Right(model.message!);
-        } else {
-          return Left(model.toWishlistEntity());
-        }
-      }, (error) {
-        return Right(error);
-      });
-    } else {
-      return Right("No Internet Connection");
-    }
+Future<Either<AddWishlistEntity, String>> AddToWishList(String id) async {
+  bool isConnected = await InternetChecker.CheckNetwork();
+  if (isConnected) {
+    var result = await apiDao.AddToWishList(id);
+    return result.fold((model) {
+      if (model.status == false) {
+        return Right(model.message ?? "Failed to add to wishlist");
+      } else {
+        return Left(model.toWishlistEntity());
+      }
+    }, (error) {
+      return Right(error);
+    });
+  } else {
+    return Right("No Internet Connection");
   }
+}
 
   @override
 Future<Either<AddCartEntity, String>> AddToCart(String id) async {
@@ -56,6 +56,25 @@ Future<Either<AddCartEntity, String>> AddToCart(String id) async {
       (model) => Left(model.toCartEntity()),
       (error) => Right(error),
     );
+  } else {
+    return Right("No Internet Connection");
+  }
+}
+
+  @override
+Future<Either<removeFromWishlistEntity, String>> RemoveFromWishList(String id) async {
+  bool isConnected = await InternetChecker.CheckNetwork();
+  if (isConnected) {
+    var result = await apiDao.RemoveFromWishList(id);
+    return result.fold((model) {
+      if (model.status == false) {
+        return Right(model.message ?? "Failed to remove from wishlist");
+      } else {
+        return Left(model.toEntity());
+      }
+    }, (error) {
+      return Right(error);
+    });
   } else {
     return Right("No Internet Connection");
   }

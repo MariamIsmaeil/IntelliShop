@@ -7,20 +7,22 @@ import 'package:meta/meta.dart';
 import '../../../../products_screen/data/model/ProductModel.dart';
 
 part 'favourite_state.dart';
+
 @injectable
 class FavouriteCubit extends Cubit<FavouriteState> {
   @factoryMethod
   FavouriteCubit(this.getFavouritesUseCase) : super(FavouriteInitial());
-  static FavouriteCubit get(context)=>BlocProvider.of(context);
+  
+  static FavouriteCubit get(context) => BlocProvider.of(context);
 
   GetFavouritesUseCase getFavouritesUseCase;
 
-  GetWishlist()async{
+  GetWishlist() async {
     emit(FavouriteLoadingState());
     var result = await getFavouritesUseCase.call();
-    result.fold((products){
+    result.fold((products) {
       emit(FavouriteSuccessState(products));
-    }, (error){
+    }, (error) {
       emit(FavouriteErrorState(error));
     });
   }

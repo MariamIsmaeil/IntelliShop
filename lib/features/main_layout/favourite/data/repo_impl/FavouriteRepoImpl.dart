@@ -4,24 +4,48 @@ import 'package:ecommerce_app/features/main_layout/favourite/data/dao/FavouriteD
 import 'package:ecommerce_app/features/main_layout/favourite/domain/repo/FavouriteRepo.dart';
 import 'package:ecommerce_app/features/products_screen/data/model/ProductModel.dart';
 import 'package:injectable/injectable.dart';
+
 @Injectable(as: FavouriteRepo)
-class FavouriteRepoImpl extends FavouriteRepo{
+class FavouriteRepoImpl extends FavouriteRepo {
   FavouriteDao apiDao;
+  
   @factoryMethod
   FavouriteRepoImpl(this.apiDao);
+
   @override
   Future<Either<List<ProductModel>, String>> GetFavourites() async {
     bool isConnected = await InternetChecker.CheckNetwork();
-    if(isConnected){
+    if (isConnected) {
       var result = await apiDao.GetFavourites();
-      return result.fold((favouriteModel){
-        return Left(favouriteModel.data??[]);
-      }, (error){
+      return result.fold((wishlistResponse) {
+        // Extract products from wishlist items
+        var products = wishlistResponse.data?.map((item) => item.product!).toList() ?? [];
+        return Left(products);
+      }, (error) {
         return Right(error);
       });
-    }else{
+    } else {
       return Right("No Internet Connection");
     }
   }
 
+  @override
+  Future<Either<String, String>> AddToWishList(String productId) async {
+    bool isConnected = await InternetChecker.CheckNetwork();
+    if (isConnected) {
+      return await apiDao.AddToWishList(productId);
+    } else {
+      return Right("No Internet Connection");
+    }
+  }
+
+  @override
+  Future<Either<String, String>> RemoveFromWishList(String wishlistItemId) async {
+    bool isConnected = await InternetChecker.CheckNetwork();
+    if (isConnected) {
+      return await apiDao.RemoveFromWishList(wishlistItemId);
+    } else {
+      return Right("No Internet Connection");
+    }
+  }
 }
