@@ -24,6 +24,7 @@ class Endpoint {
   static const String cartEndpoint = "/cart";
   static String removeFromWishlistEndpoint(String productId) => '/wishlist/$productId';
 
-  
+  static const String searchEndpoint = "/search";
+  static const String recommendationsEndpoint = "/all-recommendations";
 
 }
