@@ -1,6 +1,5 @@
 
 import 'package:ecommerce_app/features/products_screen/data/model/ProductModel.dart';
-import 'package:ecommerce_app/features/products_screen/data/model/ProductsResponseModel.dart';
 import 'package:ecommerce_app/features/search/domain/entity/search_entity.dart';
 
 class SearchModel extends SearchEntity {

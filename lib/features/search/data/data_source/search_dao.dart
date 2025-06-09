@@ -1,4 +1,4 @@
-import 'package:dio/dio.dart';
+
 import 'package:ecommerce_app/core/network/api_manager.dart';
 import 'package:ecommerce_app/core/network/endpoint.dart';
 import 'package:ecommerce_app/features/search/data/data_source/SearchRemoteDataSource.dart';

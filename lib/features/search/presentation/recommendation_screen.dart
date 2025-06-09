@@ -42,72 +42,61 @@ class _RecommendationScreenState extends State<RecommendationScreen> {
   Widget build(BuildContext context) {
     return BlocProvider<SearchCubit>.value(
       value: _searchCubit,
-      child: Scaffold(
-        appBar: AppBar(
-          title: Text(
-            "Search",
-            style: TextStyle(color: ColorManager.primary),
-          ),
-          leading: IconButton(
-            icon: Icon(Icons.arrow_back, color: ColorManager.primary),
-            onPressed: () => Navigator.pop(context),
-          ),
-        ),
-        body: Padding(
+      child:  Padding(
           padding: EdgeInsets.all(16.w),
           child: Column(
             children: [
-              // Search Bar
-              TextFormField(
-                controller: _searchController,
-                cursorColor: ColorManager.primary,
-                style: getRegularStyle(
-                  color: ColorManager.primary,
-                  fontSize: FontSize.s16,
-                ),
-                decoration: InputDecoration(
-                  contentPadding: EdgeInsets.symmetric(
-                    horizontal: AppMargin.m12.w,
-                    vertical: AppMargin.m8.h,
-                  ),
-                  border: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(10000),
-                    borderSide: BorderSide(
-                      width: AppSize.s1,
-                      color: ColorManager.primary,
-                    ),
-                  ),
-                  focusedBorder: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(10000),
-                    borderSide: BorderSide(
-                      width: AppSize.s1,
-                      color: ColorManager.primary,
-                    ),
-                  ),
-                  prefixIcon: Icon(
-                    Icons.search,
-                    color: ColorManager.primary,
-                  ),
-                  hintText: AppConstants.searchHint,
-                  hintStyle: getRegularStyle(
-                    color: ColorManager.primary,
-                    fontSize: FontSize.s16,
-                  ),
-                  suffixIcon: IconButton(
-                    icon: Icon(Icons.clear, color: ColorManager.primary),
-                    onPressed: () {
-                      _searchController.clear();
-                      _searchCubit.clearSearch();
-                    },
-                  ),
-                ),
-                onFieldSubmitted: (query) {
-                  if (query.isNotEmpty) {
-                    _searchCubit.searchProducts(query);
-                  }
-                },
-              ),
-              SizedBox(height: 16.h),
+              // // Search Bar
+              // TextFormField(
+              //   controller: _searchController,
+              //   cursorColor: ColorManager.primary,
+              //   style: getRegularStyle(
+              //     color: ColorManager.primary,
+              //     fontSize: FontSize.s16,
+              //   ),
+              //   decoration: InputDecoration(
+              //     contentPadding: EdgeInsets.symmetric(
+              //       horizontal: AppMargin.m12.w,
+              //       vertical: AppMargin.m8.h,
+              //     ),
+              //     border: OutlineInputBorder(
+              //       borderRadius: BorderRadius.circular(10000),
+              //       borderSide: BorderSide(
+              //         width: AppSize.s1,
+              //         color: ColorManager.primary,
+              //       ),
+              //     ),
+              //     focusedBorder: OutlineInputBorder(
+              //       borderRadius: BorderRadius.circular(10000),
+              //       borderSide: BorderSide(
+              //         width: AppSize.s1,
+              //         color: ColorManager.primary,
+              //       ),
+              //     ),
+              //     prefixIcon: Icon(
+              //       Icons.search,
+              //       color: ColorManager.primary,
+              //     ),
+              //     hintText: AppConstants.searchHint,
+              //     hintStyle: getRegularStyle(
+              //       color: ColorManager.primary,
+              //       fontSize: FontSize.s16,
+              //     ),
+              //     suffixIcon: IconButton(
+              //       icon: Icon(Icons.clear, color: ColorManager.primary),
+              //       onPressed: () {
+              //         _searchController.clear();
+              //         _searchCubit.clearSearch();
+              //       },
+              //     ),
+              //   ),
+              //   onFieldSubmitted: (query) {
+              //     if (query.isNotEmpty) {
+              //       _searchCubit.searchProducts(query);
+              //     }
+              //   },
+              // ),
+              // SizedBox(height: 16.h),
               // Search Results
               Expanded(
                 child: BlocBuilder<SearchCubit, SearchState>(
@@ -132,7 +121,7 @@ class _RecommendationScreenState extends State<RecommendationScreen> {
             ],
           ),
         ),
-      ),
+      
     );
   }
 

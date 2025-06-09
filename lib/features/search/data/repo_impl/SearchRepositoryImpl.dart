@@ -1,6 +1,5 @@
 import 'package:dartz/dartz.dart';
 import 'package:ecommerce_app/features/search/data/data_source/SearchRemoteDataSource.dart';
-import 'package:ecommerce_app/features/search/data/data_source/search_dao.dart';
 import 'package:ecommerce_app/features/search/domain/entity/recommendations_entity.dart';
 import 'package:ecommerce_app/features/search/domain/entity/search_entity.dart';
 import 'package:injectable/injectable.dart';

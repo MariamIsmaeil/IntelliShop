@@ -1,5 +1,4 @@
 import 'package:ecommerce_app/features/products_screen/data/model/ProductModel.dart';
-import 'package:ecommerce_app/features/products_screen/data/model/ProductsResponseModel.dart';
 import 'package:ecommerce_app/features/search/domain/entity/recommendations_entity.dart';
 
 class RecommendationsModel extends RecommendationsEntity {

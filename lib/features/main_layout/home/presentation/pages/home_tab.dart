@@ -1,5 +1,7 @@
 import 'dart:async';
 import 'package:ecommerce_app/features/main_layout/brand/brands_list_screen.dart';
+import 'package:ecommerce_app/features/main_layout/brand/products_by_brand_screen.dart';
+import 'package:ecommerce_app/features/main_layout/categories/presentation/ProductsByCategoryScreen.dart';
 import 'package:ecommerce_app/features/main_layout/categories/presentation/all_categories_screen.dart';
 import 'package:ecommerce_app/features/main_layout/home/presentation/manager/home_cubit.dart';
 import 'package:ecommerce_app/features/main_layout/home/presentation/widgets/custom_category_widget.dart';
@@ -12,7 +14,6 @@ import '../../../../../core/resources/assets_manager.dart';
 import '../widgets/custom_ads_widget.dart';
 import '../widgets/custom_brand_widget.dart';
 import '../widgets/custom_section_bar.dart';
-
 
 class HomeTab extends StatefulWidget {
   const HomeTab({super.key});
@@ -54,7 +55,9 @@ class _HomeTabState extends State<HomeTab> {
   @override
   Widget build(BuildContext context) {
     return BlocProvider(
-      create: (context) => getIt<HomeCubit>()..GetCategories()..GetBrands(),
+      create: (context) => getIt<HomeCubit>()
+        ..GetCategories()
+        ..GetBrands(),
       child: SingleChildScrollView(
         child: Padding(
           padding: const EdgeInsets.all(8.0),
@@ -67,32 +70,53 @@ class _HomeTabState extends State<HomeTab> {
               ),
               Column(
                 children: [
-                  CustomSectionBar(sectionNname: 'Categories', function: () { Navigator.push(
-                context,
-                MaterialPageRoute(
-          builder: (context) => const AllCategoriesScreen(),
-                ),
-              );}),
+                  CustomSectionBar(
+                      sectionNname: 'Categories',
+                      function: () {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) => const AllCategoriesScreen(),
+                          ),
+                        );
+                      }),
                   BlocBuilder<HomeCubit, HomeState>(
-                    buildWhen:(previous, current) {
-                      if(current is HomeCategoriesLoadingState
-                      ||current is HomeCategoriesSuccessState
-                      || current is HomeCategoriesErrorState){
+                    buildWhen: (previous, current) {
+                      if (current is HomeCategoriesLoadingState ||
+                          current is HomeCategoriesSuccessState ||
+                          current is HomeCategoriesErrorState) {
                         return true;
                       }
                       return false;
                     },
                     builder: (context, state) {
-                      if(state is HomeCategoriesSuccessState){
+                      if (state is HomeCategoriesSuccessState) {
                         return SizedBox(
                           height: 330.h,
                           child: GridView.builder(
                             scrollDirection: Axis.horizontal,
                             itemBuilder: (context, index) {
-                              return CustomCategoryWidget(state.categoriesEntity.data![index],);
+                              final category =
+                                  state.categoriesEntity.data![index];
+                              return CustomCategoryWidget(
+                                category,
+                                onTap: () {
+                                  Navigator.push(
+                                    context,
+                                    MaterialPageRoute(
+                                      builder: (context) =>
+                                          ProductsByCategoryScreen(
+                                        categorySlug: category.slug ?? "",
+                                        categoryName: category.name ?? "",
+                                      ),
+                                    ),
+                                  );
+                                },
+                              );
                             },
-                            itemCount: state.categoriesEntity.data?.length??0,
-                            gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+                            itemCount: state.categoriesEntity.data?.length ?? 0,
+                            gridDelegate:
+                                const SliverGridDelegateWithFixedCrossAxisCount(
                               crossAxisCount: 2,
                               crossAxisSpacing: 15,
                               mainAxisSpacing: 15,
@@ -100,54 +124,92 @@ class _HomeTabState extends State<HomeTab> {
                           ),
                         );
                       }
-                      if(state is HomeCategoriesErrorState){
-                        return Center(child: Text(
-                          state.error
-                        ),);
+                      if (state is HomeCategoriesErrorState) {
+                        return Center(
+                          child: Text(state.error),
+                        );
                       }
-                      return Center(child: CircularProgressIndicator(),);
+                      return Center(
+                        child: CircularProgressIndicator(),
+                      );
                     },
                   ),
                   SizedBox(height: 5.h),
-                  CustomSectionBar(sectionNname: 'Brands', function: () {Navigator.push(
-                context,
-                MaterialPageRoute(
-          builder: (context) => const BrandsListScreen(),
-                ),
-              );}),
+                  CustomSectionBar(
+                      sectionNname: 'Brands',
+                      function: () {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) => const BrandsListScreen(),
+                          ),
+                        );
+                      }),
                   BlocBuilder<HomeCubit, HomeState>(
-                    buildWhen:(previous, current) {
-                      if(current is HomeBrandsLoadingState
-                          ||current is HomeBrandsSuccessState
-                          || current is HomeBrandsErrorState){
+                    buildWhen: (previous, current) {
+                      if (current is HomeBrandsLoadingState ||
+                          current is HomeBrandsSuccessState ||
+                          current is HomeBrandsErrorState) {
                         return true;
                       }
                       return false;
                     },
                     builder: (context, state) {
-                      if(state is HomeBrandsSuccessState){
+                      if (state is HomeBrandsSuccessState) {
                         return SizedBox(
                           height: 330.h,
                           child: GridView.builder(
                             scrollDirection: Axis.horizontal,
-                            itemBuilder: (context, index) {
-                              return CustomBrandWidget(brandEntity: state.brandsResponseEntity.data![index],);
-                            },
-                            itemCount: state.brandsResponseEntity.data?.length??0,
-                            gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+                            itemCount:
+                                state.brandsResponseEntity.data?.length ?? 0,
+                            gridDelegate:
+                                const SliverGridDelegateWithFixedCrossAxisCount(
                               crossAxisCount: 2,
                               crossAxisSpacing: 15,
-                              mainAxisSpacing: 15
+                              mainAxisSpacing: 15,
                             ),
+                            itemBuilder: (context, index) {
+                              final brand =
+                                  state.brandsResponseEntity.data![index];
+
+                              return CustomBrandWidget(
+                                brandEntity: brand,
+                                onTap: () {
+                                  final slug = brand.slug;
+                                  if (slug != null && slug.isNotEmpty) {
+                                    Navigator.push(
+                                      context,
+                                      MaterialPageRoute(
+                                        builder: (context) =>
+                                            ProductsByBrandScreen(
+                                          brandSlug: slug,
+                                          brandName:
+                                              brand.name ?? 'Brand Products',
+                                        ),
+                                      ),
+                                    );
+                                  } else {
+                                    ScaffoldMessenger.of(context).showSnackBar(
+                                      const SnackBar(
+                                        content:
+                                            Text("This brand has no slug."),
+                                      ),
+                                    );
+                                  }
+                                },
+                              );
+                            },
                           ),
                         );
                       }
-                      if(state is HomeBrandsErrorState){
-                        return Center(child: Text(
-                            state.error
-                        ),);
+                      if (state is HomeBrandsErrorState) {
+                        return Center(
+                          child: Text(state.error),
+                        );
                       }
-                      return Center(child: CircularProgressIndicator(),);
+                      return Center(
+                        child: CircularProgressIndicator(),
+                      );
                     },
                   ),
                 ],

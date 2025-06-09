@@ -6,6 +6,7 @@ import 'package:ecommerce_app/features/main_layout/categories/presentation/categ
 import 'package:ecommerce_app/features/main_layout/favourite/presentation/favourite_screen.dart';
 import 'package:ecommerce_app/features/main_layout/profile_tab/presentation/profile_tab.dart';
 import 'package:ecommerce_app/features/search/presentation/manger/search_cubit.dart';
+import 'package:ecommerce_app/features/search/presentation/recommendation_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
@@ -24,6 +25,7 @@ class _MainLayoutState extends State<MainLayout> {
     const HomeTab(),
     const CategoriesTab(),
     const FavouriteScreen(),
+    const RecommendationScreen(),
     const ProfileTab(),
   ];
   @override
@@ -53,6 +55,7 @@ class _MainLayoutState extends State<MainLayout> {
                 CustomBottomNavBarItem(IconsAssets.icHome, "Home"),
                 CustomBottomNavBarItem(IconsAssets.icCategory, "Category"),
                 CustomBottomNavBarItem(IconsAssets.icWithList, "WishList"),
+                CustomBottomNavBarItem(IconsAssets.icstar, "Recommendation"),
                 CustomBottomNavBarItem(IconsAssets.icProfile, "Profile"),
               ],
             ),
