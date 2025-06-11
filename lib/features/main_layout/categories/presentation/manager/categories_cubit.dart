@@ -26,7 +26,7 @@ class CategoriesCubit extends Cubit<CategoriesState> {
     var result = await getCategoriesUseCase.call();
     result.fold((response) {
       selectedCategory = response.data![0];
-      getSubCategories();
+     // getSubCategories();
       emit(CategoriesSuccessState(response));
     }, (error) {
       emit(CategoriesErrorState(error));
@@ -35,7 +35,7 @@ class CategoriesCubit extends Cubit<CategoriesState> {
 
   selectCategory(CategoryEntity newCategory) {
     selectedCategory = newCategory;
-    getSubCategories();
+   // getSubCategories();
     emit(SelectNewCategoryState());
   }
 

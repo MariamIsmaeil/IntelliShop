@@ -6,6 +6,7 @@ class SubCategoryModel {
     this.name,
     this.slug,
     this.description,
+    this.image
   });
 
   SubCategoryModel.fromJson(dynamic json) {
@@ -13,11 +14,13 @@ class SubCategoryModel {
     name = json['name'];
     slug = json['slug'];
     description = json['description'];
+    image=json['image'];
   }
   int? id;
   String? name;
   String? slug;
   String? description;
+  String?image;
 
   Map<String, dynamic> toJson() {
     final map = <String, dynamic>{};
@@ -25,6 +28,7 @@ class SubCategoryModel {
     map['name'] = name;
     map['slug'] = slug;
     map['description'] = description;
+    map['image']=image;
     return map;
   }
 
@@ -32,6 +36,8 @@ class SubCategoryModel {
     return SubCategoryEntity(
       id: id.toString(),
       name: name,
+      image: image,
+      
     );
   }
 }

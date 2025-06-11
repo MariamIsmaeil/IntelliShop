@@ -1,3 +1,4 @@
+import 'package:ecommerce_app/features/main_layout/categories/data/model/SubCategoriesResponse/SubCategoryModel.dart';
 import 'package:ecommerce_app/features/main_layout/home/domain/entities/CategoriesEntity/CategoriesEntity.dart';
 import 'package:ecommerce_app/features/main_layout/home/domain/entities/CategoriesEntity/CategoryEntity.dart';
 
@@ -10,7 +11,9 @@ class CategoryModel {
       required this.slug, 
       this.image, 
       this.createdAt, 
-      this.updatedAt,});
+      this.updatedAt,
+      this.subCategories
+      });
 
   CategoryModel.fromJson(dynamic json) {
     id = json['_id'];
@@ -19,6 +22,12 @@ class CategoryModel {
     image = json['image'];
     createdAt = json['createdAt'];
     updatedAt = json['updatedAt'];
+    if (json['sub_categories'] != null) {
+    subCategories = [];
+    json['sub_categories'].forEach((v) {
+      subCategories!.add(SubCategoryModel.fromJson(v));
+    });
+  }
   }
   String? id;
   String? name;
@@ -26,6 +35,8 @@ class CategoryModel {
   String? image;
   String? createdAt;
   String? updatedAt;
+  List<SubCategoryModel>? subCategories;
+
 
   Map<String, dynamic> toJson() {
     final map = <String, dynamic>{};
@@ -44,6 +55,7 @@ class CategoryModel {
       name: name,
       image: image,
       slug: slug,
+      subCategories: subCategories?.map((e) => e.toSubCategoryEntity()).toList() ?? [],
     );
   }
 

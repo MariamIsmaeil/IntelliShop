@@ -17,7 +17,7 @@ class SubCategoryItem extends StatelessWidget {
       onTap: () => Navigator.pushNamed(context, Routes.productsScreenRoute,
           arguments: CategoriesCubit.get(context).selectedCategory),
       child: Column(
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        mainAxisAlignment: MainAxisAlignment.start,
         children: [
           AspectRatio(
             aspectRatio: 1,
@@ -27,13 +27,14 @@ class SubCategoryItem extends StatelessWidget {
                   border: Border.all(color: ColorManager.primary, width: 2)),
               child: ClipRRect(
                 borderRadius: BorderRadius.circular(AppSize.s10),
-                child: Image.asset(
+                child: Image.network(
                   image,
                   fit: BoxFit.cover,
                 ),
               ),
             ),
           ),
+          SizedBox(height: 10,),
           Text(
             title,
             style: getRegularStyle(color: ColorManager.primary),
