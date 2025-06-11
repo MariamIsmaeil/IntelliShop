@@ -63,7 +63,7 @@ class ProductsByCategoryScreen extends StatelessWidget {
         crossAxisCount: 2,
         crossAxisSpacing: 16.w,
         mainAxisSpacing: 16.h,
-        childAspectRatio: 0.7,
+        childAspectRatio: 0.6,
       ),
       itemCount: products.length,
       itemBuilder: (context, index) {
@@ -71,8 +71,8 @@ class ProductsByCategoryScreen extends StatelessWidget {
           padding: EdgeInsets.symmetric(horizontal: 8.w, vertical: 8.h),
           child: CustomProductWidget(
             product: products[index],
-            width: 180.w,
-            height: 300.h,
+            width: 190.w,
+            height: 320.h,
           ),
         );
       },
