@@ -5,9 +5,7 @@ import 'package:ecommerce_app/core/resources/styles_manager.dart';
 import 'package:ecommerce_app/core/routes_manager/routes.dart';
 import 'package:ecommerce_app/core/widget/heart_button.dart';
 import 'package:ecommerce_app/features/products_screen/domain/entity/ProductEntity.dart';
-import 'package:ecommerce_app/features/products_screen/domain/entity/ProductsResponseEntity.dart';
 import 'package:ecommerce_app/features/products_screen/presentation/manager/products_cubit.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -43,8 +41,17 @@ class CustomProductWidget extends StatelessWidget {
     }
   }
 
+  bool hasDiscount(String? discountStr) {
+    final parsed = double.tryParse(discountStr ?? "");
+    return parsed != null && parsed > 0;
+  }
+
   @override
   Widget build(BuildContext context) {
+    final discount =
+        double.tryParse(product.discountInPercentage ?? "0") ?? 0.0;
+    final discountedPrice = (product.price ?? 0.0) * (1 - (discount / 100));
+
     return InkWell(
       onTap: () => Navigator.pushNamed(
         context,
@@ -52,8 +59,8 @@ class CustomProductWidget extends StatelessWidget {
         arguments: product,
       ),
       child: Container(
-        width: width * 0.4,
-        height: height * 0.3,
+        width: width * 0.50,
+        height: height * 0.40,
         decoration: BoxDecoration(
           color: Colors.white,
           borderRadius: BorderRadius.circular(16.r),
@@ -69,9 +76,9 @@ class CustomProductWidget extends StatelessWidget {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
-            // Image Section (50% of container)
+            // Image Section
             Expanded(
-              flex: 5,
+              flex: 6,
               child: Container(
                 decoration: BoxDecoration(
                   borderRadius: BorderRadius.only(
@@ -111,6 +118,14 @@ class CustomProductWidget extends StatelessWidget {
                         onTap: () {
                           ProductsCubit.get(context)
                               .AddProductWish(product.id!);
+                          ScaffoldMessenger.of(context).showSnackBar(
+                            SnackBar(
+                              content:
+                                  Text("The Product is successfully added"),
+                              backgroundColor: ColorManager.appBarTitleColor,
+                              duration: Duration(seconds: 2),
+                            ),
+                          );
                         },
                       ),
                     ),
@@ -119,14 +134,11 @@ class CustomProductWidget extends StatelessWidget {
               ),
             ),
 
-            // Content Section (50% of container)
+            // Content Section
             Expanded(
-              flex: 5,
+              flex: 3,
               child: Padding(
-                padding: EdgeInsets.symmetric(
-                  horizontal: 8.w,
-                  vertical: 4.h,
-                ),
+                padding: EdgeInsets.symmetric(horizontal: 8.w, vertical: 4.h),
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -151,7 +163,7 @@ class CustomProductWidget extends StatelessWidget {
                             color: ColorManager.grey,
                             fontSize: 12.sp,
                           ),
-                          maxLines: 3,
+                          maxLines: 1,
                           overflow: TextOverflow.ellipsis,
                         ),
                       ],
@@ -162,43 +174,34 @@ class CustomProductWidget extends StatelessWidget {
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       crossAxisAlignment: CrossAxisAlignment.end,
                       children: [
-                        // Price
                         Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
                             Text(
-                              NumberFormat.compactCurrency(name: "EGP")
-                                  .format(product.price ?? 0),
+                              NumberFormat.currency(name: "EGP", symbol: "")
+                                  .format(discountedPrice),
                               style: getMediumStyle(
                                 color: ColorManager.primary,
                                 fontSize: 14.sp,
                               ),
                             ),
-                            if (product.price != null)
+                            if (hasDiscount(product.discountInPercentage))
                               Text(
                                 "${product.price} EGP",
                                 style: getTextWithLine(),
                               ),
                           ],
                         ),
-
-                        // Add to Cart Button
                         BlocConsumer<ProductsCubit, ProductsState>(
                           listenWhen: (previous, current) {
-                            if (current is AddCartLoadingState ||
+                            return current is AddCartLoadingState ||
                                 current is AddCartErrorState ||
-                                current is AddCartSuccessState) {
-                              return true;
-                            }
-                            return false;
+                                current is AddCartSuccessState;
                           },
                           buildWhen: (previous, current) {
-                            if (current is AddCartLoadingState ||
+                            return current is AddCartLoadingState ||
                                 current is AddCartErrorState ||
-                                current is AddCartSuccessState) {
-                              return true;
-                            }
-                            return false;
+                                current is AddCartSuccessState;
                           },
                           listener: (context, state) {
                             if (state is AddCartSuccessState &&
@@ -215,8 +218,10 @@ class CustomProductWidget extends StatelessWidget {
                               borderRadius: BorderRadius.circular(100),
                               child: InkWell(
                                 onTap: () {
-                                  ProductsCubit.get(context)
-                                      .AddProductToCart(product.id!,product.quantity?.toString() ?? "1" );
+                                  ProductsCubit.get(context).AddProductToCart(
+                                    product.id!,
+                                    product.quantity?.toString() ?? "1",
+                                  );
                                 },
                                 child: Container(
                                   height: 24.h,
@@ -258,4 +263,5 @@ class CustomProductWidget extends StatelessWidget {
       ),
     );
   }
-} 
+}
+

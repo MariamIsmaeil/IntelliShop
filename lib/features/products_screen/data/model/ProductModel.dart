@@ -87,6 +87,7 @@ class ProductModel {
       quantity: quantity,
       brand: brand?.toBrandEntity(),
       category: category?.toCategoryEntity(),
+      discountInPercentage: discountInPercentage,
       //subCategory: category?.subcategories?.map((e) => e.toSubCategoryEntity()).toList(),
     );
   }

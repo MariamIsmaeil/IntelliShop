@@ -1,5 +1,7 @@
 import 'package:ecommerce_app/core/prefrences/PrefsHandler.dart';
 import 'package:ecommerce_app/core/resources/constants_manager.dart';
+import 'package:ecommerce_app/core/resources/font_manager.dart';
+import 'package:ecommerce_app/core/resources/strings_manager.dart';
 import 'package:ecommerce_app/core/widget/custom_elevated_button.dart';
 import 'package:ecommerce_app/features/auth/sign_up_screen/presentation/manager/signup_cubit.dart';
 import 'package:flutter/material.dart';
@@ -50,6 +52,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
     confirmpasswordController.dispose();
     passwordController.dispose();
   }
+
   String? _validatePasswordMatch(String? value) {
     if (value != passwordController.text) {
       return 'Passwords do not match';
@@ -63,21 +66,24 @@ class _SignUpScreenState extends State<SignUpScreen> {
       create: (context) => getIt<SignupCubit>(),
       child: BlocConsumer<SignupCubit, SignupState>(
         listener: (context, state) {
-          if(state is SignupLoadingState){
-            showDialog(context: context,
-                builder: (context) => CustomLoadingDialog(),);
+          if (state is SignupLoadingState) {
+            showDialog(
+              context: context,
+              builder: (context) => CustomLoadingDialog(),
+            );
           }
-          if(state is SignupErrorState){
+          if (state is SignupErrorState) {
             Navigator.pop(context);
             AppConstants.showToast(state.error);
           }
-          if(state is SignupSuccessState){
+          if (state is SignupSuccessState) {
             Navigator.pop(context);
             AppConstants.showToast("Account created Successfully");
-            PrefsHandler.setToken(state.signUpEntity.token??"");
-            PrefsHandler.setEmail(state.signUpEntity.user?.email??"");
-            PrefsHandler.setName(state.signUpEntity.user?.name??"");
-            Navigator.pushNamedAndRemoveUntil(context, Routes.mainRoute, (route) => false);
+            PrefsHandler.setToken(state.signUpEntity.token ?? "");
+            PrefsHandler.setEmail(state.signUpEntity.user?.email ?? "");
+            PrefsHandler.setName(state.signUpEntity.user?.name ?? "");
+            Navigator.pushNamedAndRemoveUntil(
+                context, Routes.mainRoute, (route) => false);
           }
         },
         builder: (context, state) {
@@ -92,11 +98,22 @@ class _SignUpScreenState extends State<SignUpScreen> {
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        
-                       // Center(child: SvgPicture.asset(SvgAssets.routeLogo)),
-                        SizedBox(
-                          height: AppSize.s40.h,
+                        Center(
+                          child: Column(
+                            children: [
+                              SvgPicture.asset(
+                                'assets/svg_images/route.svg',
+                                width: 140,
+                              ),
+                              Text(
+                              StringsManager.loginWelcome,
+                              style: getBoldStyle(color: ColorManager.white)
+                                  .copyWith(fontSize: FontSize.s24.sp),
+                            ),
+                            ],
+                          ),
                         ),
+                        SizedBox(height: 20,),
                         BuildTextField(
                           backgroundColor: ColorManager.white,
                           hint: 'enter your full name',
@@ -127,7 +144,8 @@ class _SignUpScreenState extends State<SignUpScreen> {
                           validation: AppValidators.validatePassword,
                           isObscured: true,
                           textInputType: TextInputType.text,
-                        ), SizedBox(
+                        ),
+                        SizedBox(
                           height: AppSize.s18.h,
                         ),
                         BuildTextField(

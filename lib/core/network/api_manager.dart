@@ -4,7 +4,6 @@ import 'package:ecommerce_app/core/resources/constants_manager.dart';
 import 'package:injectable/injectable.dart';
 import 'package:pretty_dio_logger/pretty_dio_logger.dart';
 @singleton
-@singleton
 class ApiManager {
   static late Dio dio;
 
@@ -23,13 +22,17 @@ class ApiManager {
     // ✅ Interceptor لإضافة التوكن تلقائيًا
     dio.interceptors.add(InterceptorsWrapper(
       onRequest: (options, handler) async {
-        final token = PrefsHandler.getToken();
-        print('Token in interceptor: $token');
-        if (token.isNotEmpty) {
-          options.headers['Authorization'] = 'Bearer $token';
-        }
-        return handler.next(options);
-      },
+    final token = PrefsHandler.getToken();
+    print('Token in interceptor: $token');
+    if (token.isNotEmpty) {
+      options.headers['Authorization'] = 'Bearer $token';
+    }
+    // أضف هذه الهيدرات الإضافية
+    options.headers['Content-Type'] = 'application/json';
+    options.headers['Accept'] = 'application/json';
+    options.headers['X-Requested-With'] = 'XMLHttpRequest';
+    return handler.next(options);
+  },
     ));
   }
 

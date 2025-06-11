@@ -5,6 +5,7 @@ import 'package:ecommerce_app/core/resources/font_manager.dart';
 import 'package:ecommerce_app/core/resources/styles_manager.dart';
 import 'package:ecommerce_app/core/resources/values_manager.dart';
 import 'package:ecommerce_app/features/products_screen/domain/entity/ProductEntity.dart';
+import 'package:ecommerce_app/features/products_screen/presentation/manager/products_cubit.dart';
 import 'package:ecommerce_app/features/products_screen/presentation/widgets/custom_product_widget.dart';
 import 'package:ecommerce_app/features/search/presentation/manger/search_cubit.dart';
 import 'package:flutter/material.dart';
@@ -25,16 +26,14 @@ class _RecommendationScreenState extends State<RecommendationScreen> {
   @override
   void initState() {
     super.initState();
-    // بدل BlocProvider.of هنا، اعمل create للCubit داخل الشاشة
     _searchCubit = getIt<SearchCubit>();
-
     _searchCubit.getRecommendations();
   }
 
   @override
   void dispose() {
     _searchController.dispose();
-    _searchCubit.close(); // مهم تغلق الـ cubit عشان ما يحصل memory leak
+    _searchCubit.close();
     super.dispose();
   }
 
@@ -42,62 +41,51 @@ class _RecommendationScreenState extends State<RecommendationScreen> {
   Widget build(BuildContext context) {
     return BlocProvider<SearchCubit>.value(
       value: _searchCubit,
-      child:  Padding(
+      child: BlocListener<ProductsCubit, ProductsState>(
+        listenWhen: (previous, current) =>
+            current is AddWishListSuccessState ||
+            current is AlreadyInWishlistState ||
+            current is AddWishListErrorState ||
+            current is RemoveWishListSuccessState ||
+            current is RemoveWishListErrorState,
+        listener: (context, state) {
+          if (state is AddWishListSuccessState) {
+            ScaffoldMessenger.of(context).showSnackBar(
+              SnackBar(
+                content: Text(state.message),
+                backgroundColor: Colors.green,
+              ),
+            );
+          } else if (state is AlreadyInWishlistState) {
+            ScaffoldMessenger.of(context).showSnackBar(
+              SnackBar(
+                content: Text(state.message),
+                backgroundColor: Colors.orange,
+              ),
+            );
+          } else if (state is AddWishListErrorState || state is RemoveWishListErrorState) {
+            ScaffoldMessenger.of(context).showSnackBar(
+              SnackBar(
+                content: Text(
+                  state is AddWishListErrorState ? state.error : (state as RemoveWishListErrorState).error,
+                ),
+                backgroundColor: Colors.red,
+              ),
+            );
+          } else if (state is RemoveWishListSuccessState) {
+            ScaffoldMessenger.of(context).showSnackBar(
+              SnackBar(
+                content: Text(state.message),
+                backgroundColor: Colors.blue,
+              ),
+            );
+          }
+        },
+        child: Padding(
           padding: EdgeInsets.all(16.w),
           child: Column(
             children: [
-              // // Search Bar
-              // TextFormField(
-              //   controller: _searchController,
-              //   cursorColor: ColorManager.primary,
-              //   style: getRegularStyle(
-              //     color: ColorManager.primary,
-              //     fontSize: FontSize.s16,
-              //   ),
-              //   decoration: InputDecoration(
-              //     contentPadding: EdgeInsets.symmetric(
-              //       horizontal: AppMargin.m12.w,
-              //       vertical: AppMargin.m8.h,
-              //     ),
-              //     border: OutlineInputBorder(
-              //       borderRadius: BorderRadius.circular(10000),
-              //       borderSide: BorderSide(
-              //         width: AppSize.s1,
-              //         color: ColorManager.primary,
-              //       ),
-              //     ),
-              //     focusedBorder: OutlineInputBorder(
-              //       borderRadius: BorderRadius.circular(10000),
-              //       borderSide: BorderSide(
-              //         width: AppSize.s1,
-              //         color: ColorManager.primary,
-              //       ),
-              //     ),
-              //     prefixIcon: Icon(
-              //       Icons.search,
-              //       color: ColorManager.primary,
-              //     ),
-              //     hintText: AppConstants.searchHint,
-              //     hintStyle: getRegularStyle(
-              //       color: ColorManager.primary,
-              //       fontSize: FontSize.s16,
-              //     ),
-              //     suffixIcon: IconButton(
-              //       icon: Icon(Icons.clear, color: ColorManager.primary),
-              //       onPressed: () {
-              //         _searchController.clear();
-              //         _searchCubit.clearSearch();
-              //       },
-              //     ),
-              //   ),
-              //   onFieldSubmitted: (query) {
-              //     if (query.isNotEmpty) {
-              //       _searchCubit.searchProducts(query);
-              //     }
-              //   },
-              // ),
-              // SizedBox(height: 16.h),
-              // Search Results
+              // Optional: Search bar
               Expanded(
                 child: BlocBuilder<SearchCubit, SearchState>(
                   builder: (context, state) {
@@ -121,7 +109,7 @@ class _RecommendationScreenState extends State<RecommendationScreen> {
             ],
           ),
         ),
-      
+      ),
     );
   }
 
@@ -137,7 +125,6 @@ class _RecommendationScreenState extends State<RecommendationScreen> {
           ),
         ),
         SizedBox(height: 8.h),
-        // TODO: Add recent searches from local storage
         Expanded(
           child: Center(
             child: Text(

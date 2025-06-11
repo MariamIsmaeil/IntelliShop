@@ -78,7 +78,7 @@ class CartItemWidget extends StatelessWidget {
                   ),
                   SizedBox(height: 4),
                   Text(
-                    'EGP ${cartItem.total}',
+                    'EGP ${product.price}',
                     style: getBoldStyle(fontSize: 14, color: ColorManager.primary),
                   ),
                   SizedBox(height: 4),

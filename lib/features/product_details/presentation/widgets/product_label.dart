@@ -16,7 +16,7 @@ final String productPrice;
             child: Text(
              productName,
               style: getMediumStyle(color: ColorManager.primary)
-                  .copyWith(fontSize: 18.sp),
+                  .copyWith(fontSize: 18.sp ),
             )),
         Text(
           productPrice,

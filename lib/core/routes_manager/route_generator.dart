@@ -9,6 +9,7 @@ import 'package:ecommerce_app/features/products_screen/presentation/screens/prod
 import 'package:ecommerce_app/features/search/presentation/manger/search_cubit.dart';
 import 'package:ecommerce_app/features/search/presentation/recommendation_screen.dart';
 import 'package:ecommerce_app/features/search/presentation/search_screen.dart';
+import 'package:ecommerce_app/splash.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
@@ -18,6 +19,9 @@ import '../../features/main_layout/home/domain/entities/CategoriesEntity/Categor
 class RouteGenerator {
   static Route<dynamic> getRoute(RouteSettings settings) {
     switch (settings.name) {
+      case Routes.splashRoute:
+  return MaterialPageRoute(builder: (_) => const SplashScreen());
+
       case Routes.searchRoute:
         final query = settings.arguments as String?;
         return MaterialPageRoute(

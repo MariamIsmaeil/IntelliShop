@@ -1,4 +1,5 @@
 import 'package:dartz/dartz.dart';
+import 'package:dio/dio.dart';
 import 'package:ecommerce_app/core/network/api_manager.dart';
 import 'package:ecommerce_app/core/network/endpoint.dart';
 import 'package:ecommerce_app/core/prefrences/PrefsHandler.dart';
@@ -19,10 +20,6 @@ class CartDaoApiImpl extends CartDao {
     try {
       var result = await apiManager.GetRequest(
         Endpoint.cartEndpoint,
-        // headers: {
-        //   'Authorization': 'Bearer ${PrefsHandler.getToken()}',
-        //   'Accept': 'application/json',
-        // },
       );
       return Left(CartResponseModel.fromJson(result.data));
     } catch (e) {
@@ -40,14 +37,20 @@ class CartDaoApiImpl extends CartDao {
           "product_id": productId,
           "quantity": quantity,
         },
-        // headers: {
-        //   'Authorization': 'Bearer ${PrefsHandler.getToken()}',
-        //   'Accept': 'application/json',
-        // },
       );
-      return Left(AddToCartResponseModel.fromJson(result.data));
+
+      // تحقق من حالة الـ response
+      if (result.statusCode == 200 || result.statusCode == 201) {
+        return Left(AddToCartResponseModel.fromJson(result.data));
+      } else {
+        return Right('Failed to add to cart: ${result.data}');
+      }
+    } on DioError catch (e) {
+      // طباعة تفاصيل الخطأ من Dio
+      print('Dio Error: ${e.response?.data}');
+      return Right('Dio Error: ${e.message}');
     } catch (e) {
-      return Right(e.toString());
+      return Right('Unknown Error: $e');
     }
   }
 
@@ -60,10 +63,6 @@ class CartDaoApiImpl extends CartDao {
         body: {
           "product_id": productId,
         },
-        // headers: {
-        //   'Authorization': 'Bearer ${PrefsHandler.getToken()}',
-        //   'Accept': 'application/json',
-        // },
       );
       return Left(AddToCartResponseModel.fromJson(result.data));
     } catch (e) {
@@ -76,10 +75,6 @@ class CartDaoApiImpl extends CartDao {
     try {
       var result = await apiManager.PostRequestRawData(
         "${Endpoint.cartEndpoint}/delete",
-        // headers: {
-        //   'Authorization': 'Bearer ${PrefsHandler.getToken()}',
-        //   'Accept': 'application/json',
-        // },
       );
       return Left(AddToCartResponseModel.fromJson(result.data));
     } catch (e) {

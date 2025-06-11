@@ -26,5 +26,9 @@ class Endpoint {
 
   static const String searchEndpoint = "/search";
   static const String recommendationsEndpoint = "/all-recommendations";
+  static const String checkoutEndpoint = "/order/checkout";
+  static const String ordersEndpoint = "/order";
+  static String orderByIdEndpoint(String id) => "/order/$id";
+  static String cancelOrderEndpoint(String id) => "/order/$id/cancel";
 
 }

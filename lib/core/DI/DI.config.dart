@@ -38,9 +38,18 @@ import '../../features/auth/sign_up_screen/presentation/manager/signup_cubit.dar
 import '../../features/cart/data/dao/CartDao.dart' as _i836;
 import '../../features/cart/data/dao/daoImpl/CartDaoApiImpl.dart' as _i461;
 import '../../features/cart/data/repo_impl/CartRepoImpl.dart' as _i496;
+import '../../features/cart/data/repo_impl/order_repository_impl.dart'
+    as _i1068;
 import '../../features/cart/domain/repo/CartRepo.dart' as _i163;
+import '../../features/cart/domain/repo/order_repository.dart' as _i467;
+import '../../features/cart/domain/usecase/cancel_order_usecase.dart' as _i790;
+import '../../features/cart/domain/usecase/checkout_usecase.dart' as _i244;
+import '../../features/cart/domain/usecase/get_order_by_id_usecase.dart'
+    as _i549;
+import '../../features/cart/domain/usecase/get_orders_usecase.dart' as _i332;
 import '../../features/cart/domain/usecase/GetCartUseCase.dart' as _i830;
 import '../../features/cart/presentation/manager/cart_cubit.dart' as _i680;
+import '../../features/cart/presentation/manager/order_cubit.dart' as _i501;
 import '../../features/main_layout/categories/data/datasource/CategoriesDao.dart'
     as _i425;
 import '../../features/main_layout/categories/data/datasource/datasourceimpl/CategoriesDaoApiImpl.dart'
@@ -126,6 +135,8 @@ extension GetItInjectableX on _i174.GetIt {
         () => _i806.CategoriesDaoApiImpl(gh<_i119.ApiManager>()));
     gh.factory<_i151.SignInDao>(
         () => _i1035.SignInDaoApiImpl(gh<_i119.ApiManager>()));
+    gh.factory<_i467.OrderRepository>(
+        () => _i1068.OrderRepositoryImpl(gh<_i119.ApiManager>()));
     gh.factory<_i744.SearchRemoteDataSource>(
         () => _i57.SearchRemoteDataSourceImpl(gh<_i119.ApiManager>()));
     gh.factory<_i163.CartRepo>(() => _i496.CartRepoImpl(gh<_i836.CartDao>()));
@@ -158,6 +169,14 @@ extension GetItInjectableX on _i174.GetIt {
         ));
     gh.factory<_i446.SignUpRepo>(
         () => _i359.SignUpRepoImpl(gh<_i724.SignUpDao>()));
+    gh.factory<_i790.CancelOrderUseCase>(
+        () => _i790.CancelOrderUseCase(gh<_i467.OrderRepository>()));
+    gh.factory<_i244.CheckoutUseCase>(
+        () => _i244.CheckoutUseCase(gh<_i467.OrderRepository>()));
+    gh.factory<_i332.GetOrdersUseCase>(
+        () => _i332.GetOrdersUseCase(gh<_i467.OrderRepository>()));
+    gh.factory<_i549.GetOrderByIdUseCase>(
+        () => _i549.GetOrderByIdUseCase(gh<_i467.OrderRepository>()));
     gh.factory<_i752.SignInRepo>(
         () => _i83.SignInRepoImpl(gh<_i151.SignInDao>()));
     gh.factory<_i996.SearchProductsUseCase>(
@@ -166,6 +185,12 @@ extension GetItInjectableX on _i174.GetIt {
         () => _i996.GetRecommendationsUseCase(gh<_i605.SearchRepository>()));
     gh.factory<_i450.GetSubCategoriesUseCase>(
         () => _i450.GetSubCategoriesUseCase(gh<_i426.CategoriesRepo>()));
+    gh.factory<_i501.OrderCubit>(() => _i501.OrderCubit(
+          checkoutUseCase: gh<_i244.CheckoutUseCase>(),
+          getOrdersUseCase: gh<_i332.GetOrdersUseCase>(),
+          getOrderByIdUseCase: gh<_i549.GetOrderByIdUseCase>(),
+          cancelOrderUseCase: gh<_i790.CancelOrderUseCase>(),
+        ));
     gh.factory<_i839.FavouriteRepo>(
         () => _i510.FavouriteRepoImpl(gh<_i991.FavouriteDao>()));
     gh.factory<_i892.ProductsRepo>(

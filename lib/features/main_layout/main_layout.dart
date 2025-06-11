@@ -4,7 +4,7 @@ import 'package:ecommerce_app/core/resources/color_manager.dart';
 import 'package:ecommerce_app/core/widget/home_screen_app_bar.dart';
 import 'package:ecommerce_app/features/main_layout/categories/presentation/categories_tab.dart';
 import 'package:ecommerce_app/features/main_layout/favourite/presentation/favourite_screen.dart';
-import 'package:ecommerce_app/features/main_layout/profile_tab/presentation/profile_tab.dart';
+import 'package:ecommerce_app/features/main_layout/home/profile_tab/presentation/profile_tab.dart';
 import 'package:ecommerce_app/features/search/presentation/manger/search_cubit.dart';
 import 'package:ecommerce_app/features/search/presentation/recommendation_screen.dart';
 import 'package:flutter/material.dart';
@@ -20,19 +20,41 @@ class MainLayout extends StatefulWidget {
 }
 
 class _MainLayoutState extends State<MainLayout> {
+  // هنا غيرت الـ GlobalKey ليستخدم ProfileTab بدلاً من _ProfileTabState لأنه غير معرف خارج الـ ProfileTab نفسه
+  final GlobalKey<ProfileTabState> profileTabKey = GlobalKey<ProfileTabState>();
+
   int currentIndex = 0;
-  List<Widget> tabs = [
-    const HomeTab(),
-    const CategoriesTab(),
-    const FavouriteScreen(),
-    const RecommendationScreen(),
-    const ProfileTab(),
-  ];
+
+  late final List<Widget> tabs;
+
+  @override
+  void initState() {
+    super.initState();
+    // عشان ما تستعمل الـ instance members في الـ initializer مباشرةً
+    tabs = [
+      const HomeTab(),
+      const CategoriesTab(),
+      const FavouriteScreen(),
+      const RecommendationScreen(),
+      ProfileTab(key: profileTabKey),
+    ];
+  }
+
+  void changeSelectedIndex(int selectedIndex) {
+    setState(() {
+      currentIndex = selectedIndex;
+    });
+
+    if (selectedIndex == 4) {
+      // لما تبويب البروفايل يُختار، نحدث بياناته
+      //profileTabKey.currentState?.refreshData();
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return BlocProvider<SearchCubit>(
-      create: (_) =>
-          getIt<SearchCubit>(), // أو SearchCubit() مباشرةً حسب تعريفك
+      create: (_) => getIt<SearchCubit>(), // أو SearchCubit() حسب تعريفك
       child: Scaffold(
         appBar: const HomeScreenAppBar(),
         extendBody: false,
@@ -64,17 +86,11 @@ class _MainLayoutState extends State<MainLayout> {
       ),
     );
   }
-
-  changeSelectedIndex(int selectedIndex) {
-    setState(() {
-      currentIndex = selectedIndex;
-    });
-  }
 }
 
 class CustomBottomNavBarItem extends BottomNavigationBarItem {
-  String iconPath;
-  String title;
+  final String iconPath;
+  final String title;
   CustomBottomNavBarItem(this.iconPath, this.title)
       : super(
           label: title,
@@ -86,8 +102,7 @@ class CustomBottomNavBarItem extends BottomNavigationBarItem {
             backgroundColor: ColorManager.white, // Background of active icon
             child: ImageIcon(
               AssetImage(iconPath),
-              color: ColorManager
-                  .primary, // Active icon imagecolor: ColorManager.primary, // Active icon color
+              color: ColorManager.primary, // Active icon color
             ),
           ),
         );

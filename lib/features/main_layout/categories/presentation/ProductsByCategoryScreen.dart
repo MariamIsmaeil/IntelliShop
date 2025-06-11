@@ -71,7 +71,7 @@ class ProductsByCategoryScreen extends StatelessWidget {
           padding: EdgeInsets.symmetric(horizontal: 8.w, vertical: 8.h),
           child: CustomProductWidget(
             product: products[index],
-            width: 150.w,
+            width: 180.w,
             height: 300.h,
           ),
         );

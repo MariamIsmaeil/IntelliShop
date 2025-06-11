@@ -85,8 +85,8 @@ class _ProductsByBrandScreenState extends State<ProductsByBrandScreen> {
                       itemBuilder: (context, index) {
                         return CustomProductWidget(
                           product: products[index],
-                          width: 150.w,
-                          height: 150.h,
+                          width: 180.w,
+                          height: 180.h,
                         );
                       },
                     ),

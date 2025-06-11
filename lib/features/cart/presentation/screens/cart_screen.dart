@@ -4,6 +4,9 @@ import 'package:ecommerce_app/core/resources/color_manager.dart';
 import 'package:ecommerce_app/core/resources/styles_manager.dart';
 import 'package:ecommerce_app/core/resources/values_manager.dart';
 import 'package:ecommerce_app/features/cart/presentation/manager/cart_cubit.dart';
+import 'package:ecommerce_app/features/cart/presentation/manager/order_cubit.dart';
+import 'package:ecommerce_app/features/cart/presentation/screens/check_outScreen.dart';
+import 'package:ecommerce_app/features/products_screen/domain/entity/ProductEntity.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -46,8 +49,11 @@ class CartScreen extends StatelessWidget {
           builder: (context, state) {
             if (state is CartSuccessState) {
               final cartItems = state.cart.items ?? [];
-              final total = cartItems.fold(0.0, (sum, item) => sum + item.total);
-              
+              final cartProducts = cartItems
+                  .where((item) => item.product != null)
+                  .map((item) => item.product!.toProductEntity())
+                  .toList();
+
               return Padding(
                 padding: const EdgeInsets.all(AppPadding.p14),
                 child: Column(
@@ -56,20 +62,51 @@ class CartScreen extends StatelessWidget {
                       child: ListView.separated(
                         itemBuilder: (context, index) => CartItemWidget(
                           onDeleteTap: () => CartCubit.get(context)
-                            .removeFromCart(cartItems[index].product!.id.toString()),
+                              .removeFromCart(
+                                  cartItems[index].product!.id.toString()),
                           onDecrementTap: (value) => CartCubit.get(context)
-                            .addToCart(cartItems[index].product!.id.toString(), (cartItems[index].quantity - 1).toString()),
+                              .addToCart(
+                                  cartItems[index].product!.id.toString(), "1"),
                           onIncrementTap: (value) => CartCubit.get(context)
-                            .addToCart(cartItems[index].product!.id.toString(), (cartItems[index].quantity + 1).toString()),
+                              .addToCart(
+                                  cartItems[index].product!.id.toString(), "1"),
                           cartItem: cartItems[index],
                         ),
-                        separatorBuilder: (context, index) => SizedBox(height: AppSize.s12.h),
+                        separatorBuilder: (context, index) =>
+                            SizedBox(height: AppSize.s12.h),
                         itemCount: cartItems.length,
                       ),
                     ),
                     TotalPriceAndCheckoutBotton(
-                      totalPrice: total.toInt(),
-                      checkoutButtonOnTap: () {},
+                      cartProducts: cartProducts,
+                      checkoutButtonOnTap: () {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (_) => MultiBlocProvider(
+                              providers: [
+                                BlocProvider.value(
+                                    value: BlocProvider.of<CartCubit>(context)),
+                                BlocProvider(
+                                    create: (_) => getIt<OrderCubit>()),
+                              ],
+                              child: CheckoutScreen(
+                                total: cartProducts.fold(0.0, (sum, product) {
+                                  final price = product.price ?? 0.0;
+                                  final discount = double.tryParse(
+                                          product.discountInPercentage ??
+                                              "0") ??
+                                      0.0;
+                                  final discountedPrice =
+                                      price * (1 - discount / 100);
+                                  return sum +
+                                      discountedPrice; // بس مرة واحدة لكل منتج
+                                }),
+                              ),
+                            ),
+                          ),
+                        );
+                      },
                     ),
                     SizedBox(height: 10.h),
                   ],

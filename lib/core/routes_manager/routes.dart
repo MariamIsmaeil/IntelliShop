@@ -8,4 +8,5 @@ class Routes {
   static const String signUpRoute = "/signUp";
   static const String searchRoute = "/search";
   static const String recommendationsRoute = "/recommendations";
+  static const String splashRoute = '/splash';
 }

@@ -75,6 +75,7 @@ class _SignInScreenState extends State<SignInScreen> {
             return SafeArea(
               child: Column(
                 children: [
+                  SizedBox(height: 70.h,),
                   Center(child:AnimatedCartIcon()),
                   Padding(
                     padding: REdgeInsets.all(AppPadding.p20),
@@ -84,11 +85,6 @@ class _SignInScreenState extends State<SignInScreen> {
                         child: Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
-                            
-                            //Center(child: SvgPicture.asset(SvgAssets.routeLogo)),
-                            SizedBox(
-                              height: AppSize.s40.h,
-                            ),
                             Text(
                               StringsManager.loginWelcome,
                               style: getBoldStyle(color: ColorManager.white)
@@ -111,7 +107,7 @@ class _SignInScreenState extends State<SignInScreen> {
                               validation: AppValidators.validateEmail,
                             ),
                             SizedBox(
-                              height: AppSize.s28.h,
+                              height: 10.h,
                             ),
                             BuildTextField(
                               controller: passwordController,
@@ -138,7 +134,7 @@ class _SignInScreenState extends State<SignInScreen> {
                               ],
                             ),
                             SizedBox(
-                              height: AppSize.s60.h,
+                              height: 10.h,
                             ),
                             Center(
                               child: SizedBox(

@@ -16,6 +16,7 @@ class ProductEntity {
     this.brand,
     this.category,
     this.subCategory,
+    this.discountInPercentage
   });
 
   String? id;
@@ -24,6 +25,7 @@ class ProductEntity {
   String? description;
   String? imageCover;
   double? price;
+  String? discountInPercentage;
   int? quantity;
   BrandEntity? brand;
   CategoryEntity? category;

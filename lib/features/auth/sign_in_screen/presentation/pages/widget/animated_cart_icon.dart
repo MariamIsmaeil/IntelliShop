@@ -8,7 +8,7 @@ class AnimatedCartIcon extends StatefulWidget {
   _AnimatedCartIconState createState() => _AnimatedCartIconState();
 }
 
-class _AnimatedCartIconState extends State<AnimatedCartIcon> 
+class _AnimatedCartIconState extends State<AnimatedCartIcon>
     with SingleTickerProviderStateMixin {
   late AnimationController _controller;
   late Animation<Offset> _entryAnimation;
@@ -17,33 +17,48 @@ class _AnimatedCartIconState extends State<AnimatedCartIcon>
   @override
   void initState() {
     super.initState();
-    
+
     _controller = AnimationController(
       duration: const Duration(seconds: 3),
       vsync: this,
-    )..repeat(); // Makes animation loop forever
-    
-    // Entry animation from left (first 30% of duration)
+    );
+
     _entryAnimation = Tween<Offset>(
-      begin: const Offset(-2, 0), // Starts from left outside screen
-      end: Offset.zero,           // Ends at center
+      begin: const Offset(-2, 0),
+      end: Offset.zero,
     ).animate(
       CurvedAnimation(
         parent: _controller,
         curve: const Interval(0.0, 0.3, curve: Curves.easeOut),
       ),
     );
-    
-    // Continuous shaking animation (last 70% of duration)
+
     _shakeAnimation = Tween<double>(
-      begin: -0.03, // Slight left tilt
-      end: 0.03,    // Slight right tilt
+      begin: -0.03,
+      end: 0.03,
     ).animate(
       CurvedAnimation(
         parent: _controller,
         curve: const Interval(0.3, 1.0, curve: Curves.easeInOut),
       ),
     );
+
+    _startLoop();
+  }
+
+  Future<void> _startLoop() async {
+    while (mounted) {
+      await _controller.forward(from: 0);               // دخول + اهتزاز
+      await Future.delayed(const Duration(seconds: 30)); // اهتزاز نص دقيقة
+      if (mounted) {
+  setState(() {
+    // التغيير
+  });
+}
+                                   // تحديث للـ build لو لازم
+      await Future.delayed(const Duration(seconds: 1));  // وقت خروجه
+      _controller.reset();                               // يرجع من الأول
+    }
   }
 
   @override
