@@ -1,5 +1,7 @@
 import 'package:ecommerce_app/core/prefrences/PrefsHandler.dart';
 import 'package:ecommerce_app/core/resources/constants_manager.dart';
+import 'package:ecommerce_app/core/resources/font_manager.dart';
+import 'package:ecommerce_app/core/resources/strings_manager.dart';
 import 'package:ecommerce_app/core/widget/custom_elevated_button.dart';
 import 'package:ecommerce_app/features/auth/sign_up_screen/presentation/manager/signup_cubit.dart';
 import 'package:flutter/material.dart';
@@ -27,7 +29,7 @@ class SignUpScreen extends StatefulWidget {
 class _SignUpScreenState extends State<SignUpScreen> {
   late TextEditingController nameController;
   late TextEditingController emailController;
-  late TextEditingController phoneController;
+  late TextEditingController confirmpasswordController;
   late TextEditingController passwordController;
   GlobalKey<FormState> formKey = GlobalKey<FormState>();
 
@@ -37,7 +39,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
     super.initState();
     nameController = TextEditingController();
     emailController = TextEditingController();
-    phoneController = TextEditingController();
+    confirmpasswordController = TextEditingController();
     passwordController = TextEditingController();
   }
 
@@ -47,8 +49,15 @@ class _SignUpScreenState extends State<SignUpScreen> {
     super.dispose();
     nameController.dispose();
     emailController.dispose();
-    phoneController.dispose();
+    confirmpasswordController.dispose();
     passwordController.dispose();
+  }
+
+  String? _validatePasswordMatch(String? value) {
+    if (value != passwordController.text) {
+      return 'Passwords do not match';
+    }
+    return null;
   }
 
   @override
@@ -57,21 +66,24 @@ class _SignUpScreenState extends State<SignUpScreen> {
       create: (context) => getIt<SignupCubit>(),
       child: BlocConsumer<SignupCubit, SignupState>(
         listener: (context, state) {
-          if(state is SignupLoadingState){
-            showDialog(context: context,
-                builder: (context) => CustomLoadingDialog(),);
+          if (state is SignupLoadingState) {
+            showDialog(
+              context: context,
+              builder: (context) => CustomLoadingDialog(),
+            );
           }
-          if(state is SignupErrorState){
+          if (state is SignupErrorState) {
             Navigator.pop(context);
             AppConstants.showToast(state.error);
           }
-          if(state is SignupSuccessState){
+          if (state is SignupSuccessState) {
             Navigator.pop(context);
             AppConstants.showToast("Account created Successfully");
-            PrefsHandler.setToken(state.signUpEntity.token??"");
-            PrefsHandler.setEmail(state.signUpEntity.user?.email??"");
-            PrefsHandler.setName(state.signUpEntity.user?.name??"");
-            Navigator.pushNamedAndRemoveUntil(context, Routes.mainRoute, (route) => false);
+            PrefsHandler.setToken(state.signUpEntity.token ?? "");
+            PrefsHandler.setEmail(state.signUpEntity.user?.email ?? "");
+            PrefsHandler.setName(state.signUpEntity.user?.name ?? "");
+            Navigator.pushNamedAndRemoveUntil(
+                context, Routes.mainRoute, (route) => false);
           }
         },
         builder: (context, state) {
@@ -86,11 +98,22 @@ class _SignUpScreenState extends State<SignUpScreen> {
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        
-                       // Center(child: SvgPicture.asset(SvgAssets.routeLogo)),
-                        SizedBox(
-                          height: AppSize.s40.h,
+                        Center(
+                          child: Column(
+                            children: [
+                              SvgPicture.asset(
+                                'assets/svg_images/route.svg',
+                                width: 140,
+                              ),
+                              Text(
+                              StringsManager.loginWelcome,
+                              style: getBoldStyle(color: ColorManager.white)
+                                  .copyWith(fontSize: FontSize.s24.sp),
+                            ),
+                            ],
+                          ),
                         ),
+                        SizedBox(height: 20,),
                         BuildTextField(
                           backgroundColor: ColorManager.white,
                           hint: 'enter your full name',
@@ -98,17 +121,6 @@ class _SignUpScreenState extends State<SignUpScreen> {
                           textInputType: TextInputType.name,
                           controller: nameController,
                           validation: AppValidators.validateFullName,
-                        ),
-                        SizedBox(
-                          height: AppSize.s18.h,
-                        ),
-                        BuildTextField(
-                          hint: 'enter your mobile no.',
-                          backgroundColor: ColorManager.white,
-                          label: 'Mobile Number',
-                          controller: phoneController,
-                          validation: AppValidators.validatePhoneNumber,
-                          textInputType: TextInputType.phone,
                         ),
                         SizedBox(
                           height: AppSize.s18.h,
@@ -134,6 +146,18 @@ class _SignUpScreenState extends State<SignUpScreen> {
                           textInputType: TextInputType.text,
                         ),
                         SizedBox(
+                          height: AppSize.s18.h,
+                        ),
+                        BuildTextField(
+                          hint: 'confirm your password',
+                          backgroundColor: ColorManager.white,
+                          label: 'Confirm Password',
+                          controller: confirmpasswordController,
+                          validation: _validatePasswordMatch,
+                          isObscured: true,
+                          textInputType: TextInputType.phone,
+                        ),
+                        SizedBox(
                           height: AppSize.s50.h,
                         ),
                         Center(
@@ -153,7 +177,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
                                       name: nameController.text,
                                       email: emailController.text,
                                       password: passwordController.text,
-                                      phone: phoneController.text);
+                                      phone: "");
                                 }
                               },
                             ),

@@ -3,11 +3,13 @@ import 'package:ecommerce_app/features/main_layout/favourite/domain/repo/Favouri
 import 'package:injectable/injectable.dart';
 
 import '../../../../products_screen/data/model/ProductModel.dart';
+
 @injectable
-class GetFavouritesUseCase{
+class GetFavouritesUseCase {
   FavouriteRepo repo;
+  
   @factoryMethod
   GetFavouritesUseCase(this.repo);
 
-  Future<Either<List<ProductModel>, String>> call()=>repo.GetFavourites();
+  Future<Either<List<ProductModel>, String>> call() => repo.GetFavourites();
 }

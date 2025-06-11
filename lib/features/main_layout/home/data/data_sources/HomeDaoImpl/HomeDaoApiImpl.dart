@@ -21,14 +21,14 @@ class HomeDaoApiImpl extends HomeDao{
     }
   }
 
-  @override
-  Future<Either<BrandsResponseModel, String>> GetBrands() async{
-    try{
-      var response = await apiManager.GetRequest(Endpoint.brandsEndpoint);
-      return Left(BrandsResponseModel.fromJson(response.data));
-    }catch(error){
-      return Right(error.toString());
-    }
+ @override
+Future<Either<BrandsResponseModel, String>> GetBrands() async{
+  try{
+    var response = await apiManager.GetRequest(Endpoint.brandsEndpoint);
+    return Left(BrandsResponseModel.fromJson(response.data));
+  }catch(error){
+    return Right(error.toString());
   }
+}
 
 }

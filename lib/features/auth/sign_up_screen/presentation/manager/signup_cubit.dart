@@ -6,25 +6,31 @@ import 'package:injectable/injectable.dart';
 import 'package:meta/meta.dart';
 
 part 'signup_state.dart';
+
 @injectable
 class SignupCubit extends Cubit<SignupState> {
   @factoryMethod
   SignupCubit(this.signUpUseCase) : super(SignupInitial());
-  static SignupCubit get(context)=>BlocProvider.of(context);
+  static SignupCubit get(context) => BlocProvider.of(context);
 
   SignUpUseCase signUpUseCase;
-  SignUp({required String name , required String email , required String password , required String phone})async{
+  SignUp(
+      {required String name,
+      required String email,
+      required String password,
+      required String phone}) async {
     emit(SignupLoadingState());
-    var result = await signUpUseCase.call(name: name, email: email, password: password, phone: phone);
-    result.fold((signupEntity){
-      if(signupEntity.errors!= null){
+    var result = await signUpUseCase.call(
+        name: name, email: email, password: password, phone: phone);
+    result.fold((signupEntity) {
+      if (signupEntity.errors != null) {
         emit(SignupErrorState(signupEntity.errors!.msg!));
-      }else if(signupEntity.statusMsg!=null){
+      } else if (signupEntity.statusMsg != null) {
         emit(SignupErrorState(signupEntity.message!));
-      }else{
+      } else {
         emit(SignupSuccessState(signupEntity));
       }
-    }, (error){
+    }, (error) {
       emit(SignupErrorState(error));
     });
   }

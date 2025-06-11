@@ -2,26 +2,48 @@ import 'package:ecommerce_app/core/resources/color_manager.dart';
 import 'package:ecommerce_app/core/resources/styles_manager.dart';
 import 'package:ecommerce_app/core/resources/values_manager.dart';
 import 'package:ecommerce_app/core/widget/custom_elevated_button.dart';
+import 'package:ecommerce_app/features/products_screen/data/model/AddCart/CartitemModel.dart';
+import 'package:ecommerce_app/features/products_screen/domain/entity/ProductEntity.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 class TotalPriceAndCheckoutBotton extends StatelessWidget {
-  const TotalPriceAndCheckoutBotton(
-      {super.key, required this.totalPrice, required this.checkoutButtonOnTap});
-  final int totalPrice;
+  const TotalPriceAndCheckoutBotton({
+    super.key,
+    required this.cartItems,
+    required this.checkoutButtonOnTap,
+  });
+
+  final List<CartItemModel> cartItems;
+
   final void Function() checkoutButtonOnTap;
+
+  double _calculateTotalPrice() {
+  double total = 0.0;
+
+  for (var item in cartItems) {
+    final price = item.product?.price ?? 0.0;
+    final discount = double.tryParse(item.product?.discountInPercentage ?? "0") ?? 0.0;
+    final discountedPrice = price * (1 - discount / 100);
+    total += discountedPrice * 1;
+  }
+
+  return total;
+}
+
+
+
   @override
   Widget build(BuildContext context) {
+    final totalPrice = _calculateTotalPrice();
+
     return Row(
       children: [
         Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            // Total price ==================================
             Text(
               'Total price',
-              maxLines: 1,
-              overflow: TextOverflow.ellipsis,
               style: getMediumStyle(
                 color: ColorManager.textColor.withOpacity(0.6),
                 fontSize: AppSize.s18.sp,
@@ -31,7 +53,7 @@ class TotalPriceAndCheckoutBotton extends StatelessWidget {
             SizedBox(
               width: 90.w,
               child: Text(
-                'EGP $totalPrice',
+                'EGP ${totalPrice.toStringAsFixed(2)}',
                 maxLines: 1,
                 overflow: TextOverflow.ellipsis,
                 style: getMediumStyle(
@@ -43,8 +65,6 @@ class TotalPriceAndCheckoutBotton extends StatelessWidget {
           ],
         ),
         SizedBox(width: 18.h),
-
-        // Checkout button ================================
         Expanded(
           child: CustomElevatedButton(
             label: 'Check Out',
@@ -59,3 +79,4 @@ class TotalPriceAndCheckoutBotton extends StatelessWidget {
     );
   }
 }
+

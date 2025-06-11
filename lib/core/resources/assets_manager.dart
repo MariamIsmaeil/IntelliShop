@@ -41,6 +41,8 @@ abstract class IconsAssets {
   static const String icDelete = "$iconsPath/ic_delete.png";
   static const String _icHeart = "$iconsPath/heart.png";
   static const String _icClickedHeart = "$iconsPath/clicked_heart.png";
+  static const String _icRecommendation = "$iconsPath/icRecommendation.png";
+  static const String _icstar = "$iconsPath/ic_star.png";
 
   static String get icCategory => _icCategory;
   static String get icHome => _icHome;
@@ -50,6 +52,8 @@ abstract class IconsAssets {
   static String get icSearch => _icSearch;
   static String get icHeart => _icHeart;
   static String get icClickedHeart => _icClickedHeart;
+  static String get icRecommendation => _icRecommendation;
+  static String get icstar => _icstar;
 }
 
 

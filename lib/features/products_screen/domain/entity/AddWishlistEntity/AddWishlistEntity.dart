@@ -4,13 +4,19 @@
 
 class AddWishlistEntity {
   AddWishlistEntity({
-      this.statusMsg, 
-      this.status, 
-      this.message,});
+    this.status, 
+    this.message,
+  });
 
-  String? statusMsg;
-  String? status;
+  bool? status;
   String? message;
+}
+class removeFromWishlistEntity {
+  removeFromWishlistEntity({
+    this.status, 
+    this.message,
+  });
 
-
+  bool? status;
+  String? message;
 }

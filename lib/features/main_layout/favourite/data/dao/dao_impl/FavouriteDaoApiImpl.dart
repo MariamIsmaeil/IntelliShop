@@ -5,22 +5,45 @@ import 'package:ecommerce_app/features/main_layout/favourite/data/dao/FavouriteD
 import 'package:ecommerce_app/features/main_layout/favourite/data/model/GetWishlistResponse.dart';
 import 'package:injectable/injectable.dart';
 
-import '../../../../../../core/prefrences/PrefsHandler.dart';
 @Injectable(as: FavouriteDao)
-class FavouriteDaoApiImpl extends FavouriteDao{
+class FavouriteDaoApiImpl extends FavouriteDao {
   ApiManager apiManager;
+  
   @factoryMethod
   FavouriteDaoApiImpl(this.apiManager);
+
   @override
-  Future<Either<GetWishlistResponse, String>> GetFavourites() async{
-    try{
-      var response = await apiManager.GetRequest(Endpoint.wishlistEndpoint,headers: {
-        "token":PrefsHandler.getToken()
-      });
+  Future<Either<GetWishlistResponse, String>> GetFavourites() async {
+    try {
+      var response = await apiManager.GetRequest(Endpoint.wishlistEndpoint);
       return Left(GetWishlistResponse.fromJson(response.data));
-    }catch(e){
+    } catch (e) {
       return Right(e.toString());
     }
   }
-  
+
+  @override
+  Future<Either<String, String>> AddToWishList(String productId) async {
+    try {
+      var response = await apiManager.PostRequestRawData(
+        Endpoint.wishlistEndpoint,
+        body: {"product_id": productId},
+      );
+      return Left(response.data['message']);
+    } catch (e) {
+      return Right(e.toString());
+    }
+  }
+
+  @override
+  Future<Either<String, String>> RemoveFromWishList(String wishlistItemId) async {
+    try {
+      var response = await apiManager.DeleteRequest(
+        "${Endpoint.wishlistEndpoint}/$wishlistItemId",
+      );
+      return Left(response.data['message']);
+    } catch (e) {
+      return Right(e.toString());
+    }
+  }
 }

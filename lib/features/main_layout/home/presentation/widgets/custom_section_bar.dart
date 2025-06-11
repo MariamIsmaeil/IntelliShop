@@ -20,9 +20,10 @@ class CustomSectionBar extends StatelessWidget {
         children: [
           Text(
             sectionNname,
-            style: getMediumStyle(
+            style: TextStyle(
               fontSize: 18,
-              color: ColorManager.darkBlue,
+              fontWeight: FontWeight.bold,
+              color: ColorManager.primary,
             ),
           ),
           TextButton(
@@ -31,7 +32,10 @@ class CustomSectionBar extends StatelessWidget {
             },
             child: Text(
               'view all',
-              style: getMediumStyle(color: ColorManager.darkBlue),
+              style: TextStyle(
+              fontSize: 14,
+              color: ColorManager.primary,
+            ),
             ),
           ),
         ],

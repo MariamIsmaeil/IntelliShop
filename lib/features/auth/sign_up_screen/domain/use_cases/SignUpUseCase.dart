@@ -3,11 +3,16 @@ import 'package:ecommerce_app/features/auth/sign_up_screen/domain/repositories/S
 import 'package:injectable/injectable.dart';
 
 import '../entities/SignupEntity/SignUpEntity.dart';
+
 @injectable
-class SignUpUseCase{
+class SignUpUseCase {
   SignUpRepo repo;
   @factoryMethod
   SignUpUseCase(this.repo);
-  Future<Either<SignUpEntity, String>> call({required String name , required String email , required String password,required String phone})=>
+  Future<Either<SignUpEntity, String>> call(
+          {required String name,
+          required String email,
+          required String password,
+          required String phone}) =>
       repo.SignUp(name: name, email: email, password: password, phone: phone);
 }

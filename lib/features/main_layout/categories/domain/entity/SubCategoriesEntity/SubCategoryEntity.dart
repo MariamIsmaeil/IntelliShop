@@ -3,9 +3,12 @@
 
 class SubCategoryEntity {
   SubCategoryEntity({
-      this.id, 
-      this.name,});
+    this.id,
+    this.name,
+    this.image,
+  });
+
   String? id;
   String? name;
-
+  String? image;
 }

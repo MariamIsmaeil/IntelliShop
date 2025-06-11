@@ -4,95 +4,91 @@ import 'package:ecommerce_app/features/products_screen/presentation/manager/prod
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
-class HeartButton extends StatefulWidget {
-  final void Function()? onTap;
+class HeartButton extends StatelessWidget {
   final String productId;
-  const HeartButton({super.key, required this.onTap,required this.productId});
-
-  @override
-  State<HeartButton> createState() => _HeartButtonState();
-}
-
-class _HeartButtonState extends State<HeartButton> {
-  String heartIcon = IconsAssets.icHeart;
-  bool isClicked = false;
+  final bool isInitiallyFavorite;
+  
+  const HeartButton({
+    super.key,
+    required this.productId,
+    this.isInitiallyFavorite = false, void Function()? onTap,
+  });
 
   @override
   Widget build(BuildContext context) {
     return BlocConsumer<ProductsCubit, ProductsState>(
-      buildWhen: (previous, current) {
-        if(current is AddWishListSuccessState || current is AddWishListLoadingState || current is AddWishListErrorState){
-          return true;
-        }
-        return false;
-      },
       listenWhen: (previous, current) {
-        if(current is AddWishListSuccessState || current is AddWishListLoadingState || current is AddWishListErrorState){
-          return true;
-        }
-        return false;
+        return current is AddWishListSuccessState || 
+               current is RemoveWishListSuccessState ||
+               current is AlreadyInWishlistState ||
+               current is AddWishListErrorState ||
+               current is RemoveWishListErrorState;
       },
       listener: (context, state) {
-        // TODO: implement listener
+        if (state is AddWishListSuccessState && state.productId == productId) {
+          ScaffoldMessenger.of(context).showSnackBar(
+            SnackBar(
+              content: Text(state.message),
+              backgroundColor: Colors.green,
+            ),
+          );
+        }
+        else if (state is RemoveWishListSuccessState && state.productId == productId) {
+          ScaffoldMessenger.of(context).showSnackBar(
+            SnackBar(
+              content: Text(state.message),
+              backgroundColor: Colors.blue,
+            ),
+          );
+        }
+        // معالجة حالات الأخطاء...
       },
       builder: (context, state) {
-        if(state is AddWishListLoadingState && state.productId == widget.productId){
-          return Material(
-            // borderRadius: BorderRadius.circular(2),
-            color: ColorManager.white,
-            elevation: 5,
-            shape: const StadiumBorder(),
-            shadowColor: ColorManager.black,
-            child: Padding(
-                padding: const EdgeInsets.all(6),
-                child: Center(child: CircularProgressIndicator(),)),
-          );
-        }
-        if(state is AddWishListSuccessState && state.productId == widget.productId){
-          return Material(
-            // borderRadius: BorderRadius.circular(2),
-            color: ColorManager.white,
-            elevation: 5,
-            shape: const StadiumBorder(),
-            shadowColor: ColorManager.black,
-            child: Padding(
-                padding: const EdgeInsets.all(6),
-                child: ImageIcon(
+        final isLoadingAdd = state is AddWishListLoadingState && state.productId == productId;
+        final isLoadingRemove = state is RemoveWishListLoadingState && state.productId == productId;
+        final isLoading = isLoadingAdd || isLoadingRemove;
 
-                  AssetImage(IconsAssets.icClickedHeart),
-                  color: ColorManager.primary,
-                )),
-          );
-        }
-        return InkWell(
-          // radius: 25,
-          customBorder: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(16),
+        final isFavorite = state is AddWishListSuccessState && state.productId == productId 
+                          || (isInitiallyFavorite && 
+                              !(state is RemoveWishListSuccessState && state.productId == productId));
+
+        return Stack(
+        alignment: Alignment.center,
+        children: [
+          // الدائرة البيضا الخلفية
+          Container(
+            width: 40,   // حجم الدائرة
+            height: 40,
+            decoration: BoxDecoration(
+              color: Colors.white.withOpacity(0.8),  // لون الدائرة وخفيفة شوية شفافية
+              shape: BoxShape.circle,
+            ),
           ),
-          onTap: () {
-            widget.onTap?.call();
-
-            /* isClicked = !isClicked;
-          heartIcon =
-              !isClicked ? IconsAssets.icHeart : IconsAssets.icClickedHeart;*/
-
-          },
-          child: Material(
-            // borderRadius: BorderRadius.circular(2),
-            color: ColorManager.white,
-            elevation: 5,
-            shape: const StadiumBorder(),
-            shadowColor: ColorManager.black,
-            child: Padding(
-                padding: const EdgeInsets.all(6),
-                child: ImageIcon(
-
-                  AssetImage(IconsAssets.icHeart),
-                  color: ColorManager.primary,
-                )),
+          // زرار القلب مع أيقونة التحميل لو فيه تحميل
+          IconButton(
+            iconSize: 24,
+            icon: isLoading
+                ? const SizedBox(
+                    width: 20,
+                    height: 20,
+                    child: CircularProgressIndicator(strokeWidth: 2),
+                  )
+                : Icon(
+                    isFavorite ? Icons.favorite : Icons.favorite_border,
+                    color: isFavorite ? Colors.red : Colors.grey,
+                  ),
+            onPressed: () {
+              if (!isLoading) {
+                context.read<ProductsCubit>().toggleWishlistProduct(
+                  productId, 
+                  isFavorite
+                );
+              }
+            },
           ),
-        );
-      },
-    );
-  }
+        ],
+      );
+    },
+  );
+}
 }

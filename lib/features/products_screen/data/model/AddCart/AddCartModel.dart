@@ -1,55 +1,60 @@
+import 'package:ecommerce_app/features/products_screen/data/model/AddCart/CartitemModel.dart';
 import 'package:ecommerce_app/features/products_screen/domain/entity/AddCartEntity/AddCartEntity.dart';
 
-import 'CartModel.dart';
 
-/// status : "success"
-/// message : "Product added successfully to your cart"
-/// numOfCartItems : 1
-/// cartId : "67115aeca373b6e0b79d1c33"
-/// data : {"_id":"67115aeca373b6e0b79d1c33","cartOwner":"67113cf3a373b6e0b79cf2d7","products":[{"count":3,"_id":"67115aeca373b6e0b79d1c34","product":"6428ebc6dc1175abc65ca0b9","price":170}],"createdAt":"2024-10-17T18:43:56.425Z","updatedAt":"2024-10-17T18:51:26.259Z","__v":0,"totalCartPrice":510}
 
-class AddCartModel {
-  AddCartModel({
-      this.status, 
-      this.message, 
-      this.numOfCartItems, 
-      this.cartId,
-      this.statusMsg,
-      this.data,});
+class AddToCartResponseModel {
+  final bool? status;
+  final String? message;
+  final CartDataModel? data;
 
-  AddCartModel.fromJson(dynamic json) {
-    status = json['status'];
-    statusMsg = json['statusMsg'];
-    message = json['message'];
-    numOfCartItems = json['numOfCartItems'];
-    cartId = json['cartId'];
-    data = json['data'] != null ? CartModel.fromJson(json['data']) : null;
-  }
-  String? status;
-  String? message;
-  num? numOfCartItems;
-  String? cartId;
-  String? statusMsg;
-  CartModel? data;
+  AddToCartResponseModel({
+    this.status,
+    this.message,
+    this.data,
+  });
 
-  Map<String, dynamic> toJson() {
-    final map = <String, dynamic>{};
-    map['status'] = status;
-    map['message'] = message;
-    map['numOfCartItems'] = numOfCartItems;
-    map['cartId'] = cartId;
-    if (data != null) {
-      map['data'] = data?.toJson();
-    }
-    return map;
-  }
-
-  AddCartEntity toCartEntity(){
-    return AddCartEntity(
-      status: status,
-      statusMsg: statusMsg,
-      message: message
+  factory AddToCartResponseModel.fromJson(Map<String, dynamic> json) {
+    return AddToCartResponseModel(
+      status: json['status'],
+      message: json['message'],
+      data: json['data'] != null ? CartDataModel.fromJson(json['data']) : null,
     );
   }
 
+  AddCartEntity toCartEntity() {
+    return AddCartEntity(
+      status: status.toString(),
+      message: message,
+      data: data,  // ممكن تعدل هنا لتحويل بيانات data بشكل مناسب
+    );
+  }
+}
+
+class CartDataModel {
+  final int id;
+  final int userId;
+  final String createdAt;
+  final String updatedAt;
+  final List<CartItemModel> items;
+
+  CartDataModel({
+    required this.id,
+    required this.userId,
+    required this.createdAt,
+    required this.updatedAt,
+    required this.items,
+  });
+
+  factory CartDataModel.fromJson(Map<String, dynamic> json) {
+    return CartDataModel(
+      id: json['id'],
+      userId: json['user_id'],
+      createdAt: json['created_at'],
+      updatedAt: json['updated_at'],
+      items: (json['items'] as List)
+          .map((item) => CartItemModel.fromJson(item))
+          .toList(),
+    );
+  }
 }

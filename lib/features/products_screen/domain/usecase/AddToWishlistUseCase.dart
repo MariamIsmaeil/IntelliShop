@@ -11,3 +11,12 @@ class AddToWishlistUseCase{
 
   Future<Either<AddWishlistEntity, String>> call(String id)=>repo.AddToWishList(id);
 }
+
+@injectable
+class RemoveFromWishlistUseCase {
+  ProductsRepo repo;
+  @factoryMethod
+  RemoveFromWishlistUseCase(this.repo);
+
+  Future<Either<removeFromWishlistEntity, String>> call(String id)=>repo.RemoveFromWishList(id);
+  }

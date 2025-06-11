@@ -3,8 +3,10 @@ import 'package:ecommerce_app/features/auth/sign_up_screen/domain/entities/Signu
 
 import '../../data/models/SignUpResponse/SignUpReponse.dart';
 
-abstract class SignUpRepo{
-  Future<Either<SignUpEntity,String>> SignUp({required String name ,
-    required String email ,
-    required String password , required String phone});
+abstract class SignUpRepo {
+  Future<Either<SignUpEntity, String>> SignUp(
+      {required String name,
+      required String email,
+      required String password,
+      required String phone});
 }

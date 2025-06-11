@@ -10,17 +10,24 @@ import 'core/bloc_observer.dart';
 import 'core/prefrences/PrefsHandler.dart';
 import 'core/routes_manager/route_generator.dart';
 import 'features/products_screen/presentation/manager/products_cubit.dart';
-
+final RouteObserver<PageRoute> routeObserver = RouteObserver<PageRoute>();
 void main() async{
   WidgetsFlutterBinding.ensureInitialized();
   configureDependencies();
-  ApiManager.init();
-  Bloc.observer = MyBlocObserver();
+  
   await PrefsHandler.init();
+
+  ApiManager.init();
+  await PrefsHandler.setToken("test_token_123");
+  await PrefsHandler.getName();
+await PrefsHandler.getEmail();
+  Bloc.observer = MyBlocObserver();
+
   runApp(BlocProvider(
       create: (context) => getIt<ProductsCubit>(),
       child: const MainApp()));
 }
+
 
 class MainApp extends StatelessWidget {
   const MainApp({super.key});
@@ -33,12 +40,14 @@ class MainApp extends StatelessWidget {
       minTextAdapt: true,
       splitScreenMode: true,
       builder: (context, child) => MaterialApp(
+        navigatorObservers: [routeObserver],
         home:child ,
         debugShowCheckedModeBanner: false,
         onGenerateRoute: RouteGenerator.getRoute,
-        initialRoute: PrefsHandler.getToken().isNotEmpty
-            ?Routes.mainRoute
-            :Routes.signInRoute,
+        // initialRoute: PrefsHandler.getToken().isNotEmpty
+        //     ?Routes.mainRoute
+        //     :Routes.signInRoute,
+        initialRoute: Routes.splashRoute,
       ),
     );
   }

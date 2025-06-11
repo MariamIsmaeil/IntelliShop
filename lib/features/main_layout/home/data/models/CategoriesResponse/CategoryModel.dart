@@ -1,36 +1,42 @@
+import 'package:ecommerce_app/features/main_layout/categories/data/model/SubCategoriesResponse/SubCategoryModel.dart';
 import 'package:ecommerce_app/features/main_layout/home/domain/entities/CategoriesEntity/CategoriesEntity.dart';
 import 'package:ecommerce_app/features/main_layout/home/domain/entities/CategoriesEntity/CategoryEntity.dart';
 
-/// _id : "6439d61c0049ad0b52b90051"
-/// name : "Music"
-/// slug : "music"
-/// image : "https://ecommerce.routemisr.com/Route-Academy-categories/1681511964020.jpeg"
-/// createdAt : "2023-04-14T22:39:24.365Z"
-/// updatedAt : "2023-04-14T22:39:24.365Z"
+
 
 class CategoryModel {
   CategoryModel({
       this.id, 
       this.name, 
-      this.slug, 
+      required this.slug, 
       this.image, 
       this.createdAt, 
-      this.updatedAt,});
+      this.updatedAt,
+      this.subCategories
+      });
 
   CategoryModel.fromJson(dynamic json) {
     id = json['_id'];
     name = json['name'];
-    slug = json['slug'];
+    slug = json['slug']??'';
     image = json['image'];
     createdAt = json['createdAt'];
     updatedAt = json['updatedAt'];
+    if (json['sub_categories'] != null) {
+    subCategories = [];
+    json['sub_categories'].forEach((v) {
+      subCategories!.add(SubCategoryModel.fromJson(v));
+    });
+  }
   }
   String? id;
   String? name;
-  String? slug;
+ late String slug;
   String? image;
   String? createdAt;
   String? updatedAt;
+  List<SubCategoryModel>? subCategories;
+
 
   Map<String, dynamic> toJson() {
     final map = <String, dynamic>{};
@@ -47,7 +53,9 @@ class CategoryModel {
     return CategoryEntity(
       id: id,
       name: name,
-      image: image
+      image: image,
+      slug: slug,
+      subCategories: subCategories?.map((e) => e.toSubCategoryEntity()).toList() ?? [],
     );
   }
 
