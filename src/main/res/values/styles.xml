@@ -1,0 +1,4 @@
+<resources>
+    <style name="NormalTheme" parent="Theme.MaterialComponents.Light.NoActionBar" />
+    <style name="Theme.IntellijeShop" parent="Theme.MaterialComponents.Light.NoActionBar" />
+</resources>
