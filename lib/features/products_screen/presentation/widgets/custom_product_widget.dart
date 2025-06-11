@@ -136,12 +136,12 @@ class CustomProductWidget extends StatelessWidget {
 
             // Content Section
             Expanded(
-              flex: 3,
+              flex: 4,
               child: Padding(
                 padding: EdgeInsets.symmetric(horizontal: 8.w, vertical: 4.h),
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  //mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
                     // Title and Description
                     Column(
@@ -156,7 +156,7 @@ class CustomProductWidget extends StatelessWidget {
                           maxLines: 1,
                           overflow: TextOverflow.ellipsis,
                         ),
-                        SizedBox(height: 2.h),
+                        SizedBox(height: 2),
                         Text(
                           truncateDescription(product.description ?? ""),
                           style: getRegularStyle(
@@ -168,8 +168,7 @@ class CustomProductWidget extends StatelessWidget {
                         ),
                       ],
                     ),
-
-                    // Price and Add Button
+                    SizedBox(height: 5,),                     // Price and Add Button
                     Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       crossAxisAlignment: CrossAxisAlignment.end,

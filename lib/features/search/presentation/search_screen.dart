@@ -147,15 +147,15 @@ class _SearchScreenState extends State<SearchScreen> {
     return GridView.builder(
       gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
         crossAxisCount: 2,
-        childAspectRatio: 0.7,
+        childAspectRatio: 0.6,
         crossAxisSpacing: 16.w,
         mainAxisSpacing: 16.h,
       ),
       itemCount: products.length,
       itemBuilder: (context, index) {
         return CustomProductWidget(
-          width: MediaQuery.of(context).size.width * 0.5,
-          height: 300.h,
+          width: 200,
+          height: 350.h,
           product: products[index],
         );
       },

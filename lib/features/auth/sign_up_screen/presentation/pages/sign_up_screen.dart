@@ -155,7 +155,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
                           controller: confirmpasswordController,
                           validation: _validatePasswordMatch,
                           isObscured: true,
-                          textInputType: TextInputType.phone,
+                          textInputType: TextInputType.text,
                         ),
                         SizedBox(
                           height: AppSize.s50.h,

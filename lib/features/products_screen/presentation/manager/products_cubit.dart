@@ -52,7 +52,7 @@ class ProductsCubit extends Cubit<ProductsState> {
       },
     );
   }
-  AddProductWish(String id) async {
+  Future<void> AddProductWish(String id) async {
     emit(AddWishListLoadingState(id));
     var result = await addToWishlistUseCase.call(id);
     result.fold((addWishlistEntity) {

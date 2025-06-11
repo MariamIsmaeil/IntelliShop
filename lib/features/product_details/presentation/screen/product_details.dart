@@ -19,11 +19,16 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:intl/intl.dart';
 
-class ProductDetails extends StatelessWidget {
+class ProductDetails extends StatefulWidget {
   final ProductEntity product;
 
   const ProductDetails({super.key, required this.product});
 
+  @override
+  State<ProductDetails> createState() => _ProductDetailsState();
+}
+
+class _ProductDetailsState extends State<ProductDetails> {
   @override
   Widget build(BuildContext context) {
     final currencyFormat = NumberFormat.currency(name: "EGP", decimalDigits: 0);
@@ -32,8 +37,9 @@ class ProductDetails extends StatelessWidget {
       create: (context) => getIt<CartCubit>(),
       child: Builder(builder: (context) {
         final discount =
-        double.tryParse(product.discountInPercentage ?? "0") ?? 0.0;
-    final discountedPrice = (product.price ?? 0.0) * (1 - (discount / 100));
+            double.tryParse(widget.product.discountInPercentage ?? "0") ?? 0.0;
+        final discountedPrice =
+            (widget.product.price ?? 0.0) * (1 - (discount / 100));
         return Scaffold(
           appBar: AppBar(
             centerTitle: true,
@@ -63,14 +69,39 @@ class ProductDetails extends StatelessWidget {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  ProductSlider(items: [
-                    ProductItem(imageUrl: product.imageCover ?? ''),
-                    ProductItem(imageUrl: product.imageCover ?? ''),
-                    ProductItem(imageUrl: product.imageCover ?? ''),
-                  ], initialIndex: 0),
+                  ProductSlider(
+                    items: List.generate(
+                      3,
+                      (index) => ProductItem(
+                        imageUrl: widget.product.imageCover ?? '',
+                        productId: widget.product.id!,
+                        onTap: () {
+                          ProductsCubit.get(context)
+                              .AddProductWish(widget.product.id!)
+                              .then((_) {
+                            final state = ProductsCubit.get(context).state;
+
+
+                            String message = "The Item added successfully";
+                            Color bgColor = ColorManager.primary;
+
+                            setState(() {
+                              ScaffoldMessenger.of(context).showSnackBar(
+                                SnackBar(
+                                  content: Text(message),
+                                  backgroundColor: bgColor,
+                                ),
+                              );
+                            });
+                          });
+                        },
+                      ),
+                    ),
+                    initialIndex: 0,
+                  ),
                   SizedBox(height: 24.h),
                   ProductLabel(
-                    productName: product.title ?? 'No Title',
+                    productName: widget.product.title ?? 'No Title',
                     productPrice: currencyFormat.format(discountedPrice ?? 0),
                   ),
                   SizedBox(height: 16.h),
@@ -81,8 +112,8 @@ class ProductDetails extends StatelessWidget {
                   ),
                   SizedBox(height: 16.h),
                   ProductDescription(
-                    productDescription:
-                        product.description ?? 'No description available',
+                    productDescription: widget.product.description ??
+                        'No description available',
                   ),
                   ProductSize(
                     size: const [
@@ -120,7 +151,7 @@ class ProductDetails extends StatelessWidget {
                                 .copyWith(fontSize: 18.sp),
                           ),
                           SizedBox(height: 12.h),
-                          Text(currencyFormat.format(discountedPrice?? 0),
+                          Text(currencyFormat.format(discountedPrice ?? 0),
                               style: getMediumStyle(
                                       color: ColorManager.appBarTitleColor)
                                   .copyWith(fontSize: 18.sp))
@@ -131,15 +162,14 @@ class ProductDetails extends StatelessWidget {
                         child: CustomElevatedButton(
                           label: 'Add to cart',
                           onTap: () {
-                            final quantity = product.quantity ?? 1;
+                            final quantity = widget.product.quantity ?? 1;
                             ProductsCubit.get(context).AddProductToCart(
-                                product.id!, quantity.toString());
+                                widget.product.id!, quantity.toString());
                             CartCubit.get(context).getCart();
-                            ScaffoldMessenger.of(context).showSnackBar(
-                              SnackBar(
-                                content: Text('the item added successefly'),
-                                backgroundColor: ColorManager.primary,
-                                ));
+                            ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+                              content: Text('the item added successefly'),
+                              backgroundColor: ColorManager.primary,
+                            ));
                           },
                           prefixIcon: Icon(
                             Icons.add_shopping_cart_outlined,
@@ -149,7 +179,6 @@ class ProductDetails extends StatelessWidget {
                       )
                     ],
                   )
-                  
                 ],
               ),
             ),

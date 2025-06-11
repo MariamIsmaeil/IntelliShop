@@ -39,156 +39,184 @@ class _SignInScreenState extends State<SignInScreen> {
     emailController = TextEditingController();
     passwordController = TextEditingController();
   }
+
   @override
   void dispose() {
     super.dispose();
     emailController.dispose();
     passwordController.dispose();
   }
+
   @override
   Widget build(BuildContext context) {
     return BlocProvider(
       create: (context) => getIt<SignInViewModelCubit>(),
       child: Scaffold(
+        resizeToAvoidBottomInset: true,
         backgroundColor: ColorManager.primary,
-        body: BlocConsumer<SignInViewModelCubit,SignInViewModelState>(
+        body: BlocConsumer<SignInViewModelCubit, SignInViewModelState>(
           listener: (context, state) {
             print("Listen");
-            if(state is SignInViewModelLoadingState){
-              showDialog(context: context,
-                  builder: (context) => CustomLoadingDialog(),);
+            if (state is SignInViewModelLoadingState) {
+              showDialog(
+                context: context,
+                builder: (context) => CustomLoadingDialog(),
+              );
             }
-            if(state is SignInViewModelErrorState){
+            if (state is SignInViewModelErrorState) {
               Navigator.pop(context);
               AppConstants.showToast(state.error);
             }
-            if(state is SignInViewModelSuccessState){
+            if (state is SignInViewModelSuccessState) {
               Navigator.pop(context);
               AppConstants.showToast("Logged In Successfully");
-              Navigator.pushNamedAndRemoveUntil(context, Routes.mainRoute, (route) => false);
-              PrefsHandler.setToken(state.signInEntity.token??"");
-              PrefsHandler.setEmail(state.signInEntity.user?.email??"");
-              PrefsHandler.setName(state.signInEntity.user?.name??"");
+              Navigator.pushNamedAndRemoveUntil(
+                  context, Routes.mainRoute, (route) => false);
+              PrefsHandler.setToken(state.signInEntity.token ?? "");
+              PrefsHandler.setEmail(state.signInEntity.user?.email ?? "");
+              PrefsHandler.setName(state.signInEntity.user?.name ?? "");
             }
           },
           builder: (context, state) {
             return SafeArea(
-              child: Column(
-                children: [
-                  SizedBox(height: 70.h,),
-                  Center(child:AnimatedCartIcon()),
-                  Padding(
-                    padding: REdgeInsets.all(AppPadding.p20),
-                    child: SingleChildScrollView(
-                      child: Form(
-                        key: formKey,
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Text(
-                              StringsManager.loginWelcome,
-                              style: getBoldStyle(color: ColorManager.white)
-                                  .copyWith(fontSize: FontSize.s24.sp),
-                            ),
-                            Text(
-                              'Please sign in with your mail',
-                              style: getLightStyle(color: ColorManager.white)
-                                  .copyWith(fontSize: FontSize.s16.sp),
-                            ),
-                            SizedBox(
-                              height: AppSize.s50.h,
-                            ),
-                            BuildTextField(
-                              controller: emailController,
-                              backgroundColor: ColorManager.white,
-                              hint: 'enter your email',
-                              label: 'Email',
-                              textInputType: TextInputType.emailAddress,
-                              validation: AppValidators.validateEmail,
-                            ),
-                            SizedBox(
-                              height: 10.h,
-                            ),
-                            BuildTextField(
-                              controller: passwordController,
-                              hint: 'enter your password',
-                              backgroundColor: ColorManager.white,
-                              label: 'Password',
-                              validation: AppValidators.validatePassword,
-                              isObscured: true,
-                              textInputType: TextInputType.text,
-                            ),
-                            SizedBox(
-                              height: AppSize.s8.h,
-                            ),
-                            Row(
-                              children: [
-                                const Spacer(),
-                                GestureDetector(
-                                    onTap: () {},
-                                    child: Text(
-                                      'Forget password?',
-                                      style: getMediumStyle(color: ColorManager.white)
-                                          .copyWith(fontSize: FontSize.s18.sp),
-                                    )),
-                              ],
-                            ),
-                            SizedBox(
-                              height: 10.h,
-                            ),
-                            Center(
-                              child: SizedBox(
-                                // width: MediaQuery.of(context).size.width * .8,
-                                child: CustomElevatedButton(
-                                  // borderRadius: AppSize.s8,
-                                  isStadiumBorder: false,
-                                  label: 'Login',
-                                  backgroundColor: ColorManager.white,
-                                  textStyle: getBoldStyle(
-                                      color: ColorManager.primary,
-                                      fontSize: AppSize.s18),
-                                  onTap: () {
-                                    // sign in
-                                    if(formKey.currentState!.validate()){
-                                      SignInViewModelCubit.get(context).SignIn(
-                                          email: emailController.text,
-                                          password: passwordController.text);
-                                    }
-                                  },
-                                ),
-                              ),
-                            ),
-                            SizedBox(
-                              height: 30.h,
-                            ),
-                            Row(
-                              mainAxisAlignment: MainAxisAlignment.center,
-                              children: [
-                                Text(
-                                  'Don’t have an account?',
-                                  style: getSemiBoldStyle(color: ColorManager.white)
-                                      .copyWith(fontSize: FontSize.s16.sp),
-                                ),
-                                SizedBox(
-                                  width: AppSize.s8.w,
-                                ),
-                                GestureDetector(
-                                  onTap: () =>
-                                      Navigator.pushNamed(context, Routes.signUpRoute),
-                                  child: Text(
-                                    'Create Account',
-                                    style: getSemiBoldStyle(color: ColorManager.white)
+              child: SingleChildScrollView(
+                child: ConstrainedBox(
+                  constraints: BoxConstraints(
+                    minHeight: MediaQuery.of(context).size.height,
+                  ),
+                  child: IntrinsicHeight(
+                    child: Column(
+                      children: [
+                        SizedBox(
+                          height: 70.h,
+                        ),
+                        Center(child: AnimatedCartIcon()),
+                        Padding(
+                          padding: REdgeInsets.all(AppPadding.p20),
+                          child: SingleChildScrollView(
+                            child: Form(
+                              key: formKey,
+                              child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  Text(
+                                    StringsManager.loginWelcome,
+                                    style: getBoldStyle(
+                                            color: ColorManager.white)
+                                        .copyWith(fontSize: FontSize.s24.sp),
+                                  ),
+                                  Text(
+                                    'Please sign in with your mail',
+                                    style: getLightStyle(
+                                            color: ColorManager.white)
                                         .copyWith(fontSize: FontSize.s16.sp),
                                   ),
-                                ),
-                              ],
-                            )
-                          ],
+                                  SizedBox(
+                                    height: AppSize.s50.h,
+                                  ),
+                                  BuildTextField(
+                                    controller: emailController,
+                                    backgroundColor: ColorManager.white,
+                                    hint: 'enter your email',
+                                    label: 'Email',
+                                    textInputType: TextInputType.emailAddress,
+                                    validation: AppValidators.validateEmail,
+                                  ),
+                                  SizedBox(
+                                    height: 10.h,
+                                  ),
+                                  BuildTextField(
+                                    controller: passwordController,
+                                    hint: 'enter your password',
+                                    backgroundColor: ColorManager.white,
+                                    label: 'Password',
+                                    validation: AppValidators.validatePassword,
+                                    isObscured: true,
+                                    textInputType: TextInputType.text,
+                                  ),
+                                  SizedBox(
+                                    height: AppSize.s8.h,
+                                  ),
+                                  Row(
+                                    children: [
+                                      const Spacer(),
+                                      GestureDetector(
+                                          onTap: () {},
+                                          child: Text(
+                                            'Forget password?',
+                                            style: getMediumStyle(
+                                                    color: ColorManager.white)
+                                                .copyWith(
+                                                    fontSize: FontSize.s18.sp),
+                                          )),
+                                    ],
+                                  ),
+                                  SizedBox(
+                                    height: 10.h,
+                                  ),
+                                  Center(
+                                    child: SizedBox(
+                                      // width: MediaQuery.of(context).size.width * .8,
+                                      child: CustomElevatedButton(
+                                        // borderRadius: AppSize.s8,
+                                        isStadiumBorder: false,
+                                        label: 'Login',
+                                        backgroundColor: ColorManager.white,
+                                        textStyle: getBoldStyle(
+                                            color: ColorManager.primary,
+                                            fontSize: AppSize.s18),
+                                        onTap: () {
+                                          // sign in
+                                          if (formKey.currentState!
+                                              .validate()) {
+                                            SignInViewModelCubit.get(context)
+                                                .SignIn(
+                                                    email: emailController.text,
+                                                    password: passwordController
+                                                        .text);
+                                          }
+                                        },
+                                      ),
+                                    ),
+                                  ),
+                                  SizedBox(
+                                    height: 30.h,
+                                  ),
+                                  Row(
+                                    mainAxisAlignment: MainAxisAlignment.center,
+                                    children: [
+                                      Text(
+                                        'Don’t have an account?',
+                                        style: getSemiBoldStyle(
+                                                color: ColorManager.white)
+                                            .copyWith(
+                                                fontSize: FontSize.s16.sp),
+                                      ),
+                                      SizedBox(
+                                        width: AppSize.s8.w,
+                                      ),
+                                      GestureDetector(
+                                        onTap: () => Navigator.pushNamed(
+                                            context, Routes.signUpRoute),
+                                        child: Text(
+                                          'Create Account',
+                                          style: getSemiBoldStyle(
+                                                  color: ColorManager.white)
+                                              .copyWith(
+                                                  fontSize: FontSize.s16.sp),
+                                        ),
+                                      ),
+                                    ],
+                                  )
+                                ],
+                              ),
+                            ),
+                          ),
                         ),
-                      ),
+                      ],
                     ),
                   ),
-                ],
+                ),
               ),
             );
           },

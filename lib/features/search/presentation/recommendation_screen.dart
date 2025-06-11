@@ -154,7 +154,7 @@ class _RecommendationScreenState extends State<RecommendationScreen> {
     return GridView.builder(
       gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
         crossAxisCount: 2,
-        childAspectRatio: 0.7,
+        childAspectRatio: 0.6,
         crossAxisSpacing: 16.w,
         mainAxisSpacing: 16.h,
       ),
@@ -162,7 +162,7 @@ class _RecommendationScreenState extends State<RecommendationScreen> {
       itemBuilder: (context, index) {
         return CustomProductWidget(
           width: MediaQuery.of(context).size.width * 0.5,
-          height: 300.h,
+          height: 400.h,
           product: products[index],
         );
       },
