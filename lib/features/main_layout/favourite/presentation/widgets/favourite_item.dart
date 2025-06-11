@@ -66,8 +66,8 @@ class FavoriteItem extends StatelessWidget {
               children: [
                 IconButton(
                   icon: Icon(
-                    Icons.delete,
-                    color: Colors.red,
+                    Icons.favorite,
+                    color: ColorManager.primary,
                     size: 24.sp,
                   ),
                   onPressed: onDelete,

@@ -3,6 +3,7 @@ import 'package:ecommerce_app/core/resources/assets_manager.dart';
 import 'package:ecommerce_app/core/resources/color_manager.dart';
 import 'package:ecommerce_app/core/resources/styles_manager.dart';
 import 'package:ecommerce_app/core/resources/values_manager.dart';
+import 'package:ecommerce_app/core/routes_manager/routes.dart';
 import 'package:ecommerce_app/features/cart/presentation/manager/cart_cubit.dart';
 import 'package:ecommerce_app/features/cart/presentation/manager/order_cubit.dart';
 import 'package:ecommerce_app/features/cart/presentation/screens/check_outScreen.dart';
@@ -49,6 +50,7 @@ class CartScreen extends StatelessWidget {
           builder: (context, state) {
             if (state is CartSuccessState) {
               final cartItems = state.cart.items ?? [];
+
               final cartProducts = cartItems
                   .where((item) => item.product != null)
                   .map((item) => item.product!.toProductEntity())
@@ -58,25 +60,61 @@ class CartScreen extends StatelessWidget {
                 padding: const EdgeInsets.all(AppPadding.p14),
                 child: Column(
                   children: [
+                    // الجزء المتغير حسب وجود عناصر في السلة
                     Expanded(
-                      child: ListView.separated(
-                        itemBuilder: (context, index) => CartItemWidget(
-                          onDeleteTap: () => CartCubit.get(context)
-                              .removeFromCart(
-                                  cartItems[index].product!.id.toString()),
-                          onDecrementTap: (value) => CartCubit.get(context)
-                              .addToCart(
-                                  cartItems[index].product!.id.toString(), "1"),
-                          onIncrementTap: (value) => CartCubit.get(context)
-                              .addToCart(
-                                  cartItems[index].product!.id.toString(), "1"),
-                          cartItem: cartItems[index],
-                        ),
-                        separatorBuilder: (context, index) =>
-                            SizedBox(height: AppSize.s12.h),
-                        itemCount: cartItems.length,
-                      ),
+                      child: cartItems.isEmpty
+                          ? Center(
+                              child: Column(
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                children: [
+                                  Text(
+                                    "Your cart is empty!\nLet’s fill it with something awesome.",
+                                    textAlign: TextAlign.center,
+                                    style: getMediumStyle(
+                                      fontSize: 18,
+                                      color:ColorManager.primary,
+                                    ),
+                                  ),
+                                  SizedBox(height: 20.h),
+                                  InkWell(
+                                    onTap: (){
+                                      Navigator.of(context)
+                                          .pushNamedAndRemoveUntil(
+                                        Routes.mainRoute,
+                                        (route) => false,
+                                      );
+                                    },
+                                    child: Text("Go to Main Store",style:TextStyle(
+                                      color: ColorManager.primary,
+                                      decoration: TextDecoration.underline,
+                                    ) ,)),
+                                ],
+                              ),
+                            )
+                          : ListView.separated(
+                              itemBuilder: (context, index) => CartItemWidget(
+                                onDeleteTap: () => CartCubit.get(context)
+                                    .removeFromCart(cartItems[index]
+                                        .product!
+                                        .id
+                                        .toString()),
+                                onDecrementTap: (value) =>
+                                    CartCubit.get(context).addToCart(
+                                        cartItems[index].product!.id.toString(),
+                                        "1"),
+                                onIncrementTap: (value) =>
+                                    CartCubit.get(context).addToCart(
+                                        cartItems[index].product!.id.toString(),
+                                        "1"),
+                                cartItem: cartItems[index],
+                              ),
+                              separatorBuilder: (context, index) =>
+                                  SizedBox(height: AppSize.s12.h),
+                              itemCount: cartItems.length,
+                            ),
                     ),
+
+                    // يظهر دائمًا سواء السلة فاضية أو لا
                     TotalPriceAndCheckoutBotton(
                       cartItems: cartItems,
                       checkoutButtonOnTap: () {
@@ -99,9 +137,9 @@ class CartScreen extends StatelessWidget {
                                       0.0;
                                   final discountedPrice =
                                       price * (1 - discount / 100);
-                                  return sum +
-                                      discountedPrice; // بس مرة واحدة لكل منتج
-                                }), cartItems: [],
+                                  return sum + discountedPrice;
+                                }),
+                                cartItems: [],
                               ),
                             ),
                           ),
@@ -113,6 +151,7 @@ class CartScreen extends StatelessWidget {
                 ),
               );
             }
+
             if (state is CartErrorState) {
               return Center(child: Text(state.error));
             }

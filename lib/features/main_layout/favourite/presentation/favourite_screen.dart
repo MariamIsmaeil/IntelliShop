@@ -1,4 +1,7 @@
+import 'package:ecommerce_app/core/resources/color_manager.dart';
 import 'package:ecommerce_app/core/resources/constants_manager.dart';
+import 'package:ecommerce_app/core/resources/font_manager.dart';
+import 'package:ecommerce_app/core/resources/styles_manager.dart';
 import 'package:ecommerce_app/core/resources/values_manager.dart';
 import 'package:ecommerce_app/features/main_layout/favourite/presentation/viewmodel/favourite_cubit.dart';
 import 'package:ecommerce_app/features/main_layout/favourite/presentation/widgets/favourite_item.dart';
@@ -26,6 +29,21 @@ class FavouriteScreen extends StatelessWidget {
       child: BlocBuilder<FavouriteCubit, FavouriteState>(
         builder: (context, state) {
           if (state is FavouriteSuccessState) {
+            if (state.products.isEmpty) {
+              return Center(
+                child: Padding(
+                  padding: EdgeInsets.symmetric(horizontal: 24.w),
+                  child: Text(
+                    "From empty to extraordinary—your wishlist journey begins here.",
+                    textAlign: TextAlign.center,
+                    style: getMediumStyle(
+              color: ColorManager.primary,
+              fontSize: FontSize.s18,
+            ),
+                  ),
+                ),
+              );
+            }
             return Padding(
               padding: EdgeInsets.symmetric(
                   horizontal: AppSize.s14.w, vertical: AppSize.s10.h),
@@ -62,3 +80,4 @@ class FavouriteScreen extends StatelessWidget {
     );
   }
 }
+

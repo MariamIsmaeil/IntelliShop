@@ -2,14 +2,16 @@ import 'package:ecommerce_app/core/resources/color_manager.dart';
 import 'package:ecommerce_app/core/routes_manager/routes.dart';
 import 'package:ecommerce_app/features/cart/presentation/manager/cart_cubit.dart';
 import 'package:ecommerce_app/features/cart/presentation/manager/order_cubit.dart';
+import 'package:ecommerce_app/features/cart/presentation/widgets/OrderConfirmationDialog.dart';
 import 'package:ecommerce_app/features/products_screen/data/model/AddCart/CartitemModel.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 class CheckoutScreen extends StatefulWidget {
   final double total;
-   final List<CartItemModel> cartItems; 
-  const CheckoutScreen({super.key, required this.total,required this.cartItems});
+  final List<CartItemModel> cartItems;
+  const CheckoutScreen(
+      {super.key, required this.total, required this.cartItems});
 
   @override
   State<CheckoutScreen> createState() => _CheckoutScreenState();
@@ -21,24 +23,24 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
   String paymentMethod = 'Cash';
 
   void _submitOrder() async {
-  if (_formKey.currentState!.validate()) {
-    _formKey.currentState!.save();
+    if (_formKey.currentState!.validate()) {
+      _formKey.currentState!.save();
 
-    final orderCubit = BlocProvider.of<OrderCubit>(context);
-    final cartCubit = BlocProvider.of<CartCubit>(context);
+      final orderCubit = BlocProvider.of<OrderCubit>(context);
+      final cartCubit = BlocProvider.of<CartCubit>(context);
 
-    await orderCubit.checkout(
-      firstName: firstName!,
-      lastName: lastName!,
-      email: email!,
-      phoneNumber: phone!,
-      addressOne: addressOne!,
-      addressTwo: addressTwo ?? '',
-      postalCode: postalCode!, 
-      cartItems: widget.cartItems, // Use the passed cartItems
-    );
+      await orderCubit.checkout(
+        firstName: firstName!,
+        lastName: lastName!,
+        email: email!,
+        phoneNumber: phone!,
+        addressOne: addressOne!,
+        addressTwo: addressTwo ?? '',
+        postalCode: postalCode!,
+        cartItems: widget.cartItems, // Use the passed cartItems
+      );
+    }
   }
-}
 
   @override
   Widget build(BuildContext context) {
@@ -46,21 +48,27 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
     final totalWithShipping = widget.total + shipping;
 
     return BlocListener<OrderCubit, OrderState>(
-      listener: (context, state) {
+      listener: (context, state) {  
+
+
         if (state is OrderCheckoutSuccess) {
           final cartCubit = BlocProvider.of<CartCubit>(context);
           cartCubit.deleteCart();
-          Navigator.of(context).pushNamedAndRemoveUntil(
-            Routes.mainRoute,
-            (route) => false,
-          );
 
-          ScaffoldMessenger.of(context).showSnackBar(
-            SnackBar(
-              content: const Text('Your order has been placed successfully!'),
-              backgroundColor: ColorManager.primary,
+          showDialog(
+            context: context,
+            barrierDismissible: false,
+            builder: (_) => OrderConfirmationDialog(
+              cartItems: widget.cartItems,
+              subtotal: widget.total,
             ),
           );
+
+
+
+
+
+          
         } else if (state is OrderError) {
           ScaffoldMessenger.of(context).showSnackBar(
             SnackBar(

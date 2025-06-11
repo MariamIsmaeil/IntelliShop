@@ -1,9 +1,7 @@
 import 'package:ecommerce_app/core/DI/DI.dart';
 import 'package:ecommerce_app/core/resources/color_manager.dart';
-import 'package:ecommerce_app/core/resources/constants_manager.dart';
 import 'package:ecommerce_app/core/resources/font_manager.dart';
 import 'package:ecommerce_app/core/resources/styles_manager.dart';
-import 'package:ecommerce_app/core/resources/values_manager.dart';
 import 'package:ecommerce_app/features/products_screen/domain/entity/ProductEntity.dart';
 import 'package:ecommerce_app/features/products_screen/presentation/manager/products_cubit.dart';
 import 'package:ecommerce_app/features/products_screen/presentation/widgets/custom_product_widget.dart';
@@ -172,6 +170,22 @@ class _RecommendationScreenState extends State<RecommendationScreen> {
   }
 
   Widget _buildRecommendations(List<ProductEntity> products) {
+    if (products.isEmpty) {
+      return Center(
+        child: Padding(
+          padding: EdgeInsets.symmetric(horizontal: 24.w),
+          child: Text(
+            "Discover the best—everything you need, one click away.",
+            textAlign: TextAlign.center,
+            style: getMediumStyle(
+              color: ColorManager.primary,
+              fontSize: FontSize.s18,
+            ),
+          ),
+        ),
+      );
+    }
+
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
@@ -205,3 +219,4 @@ class _RecommendationScreenState extends State<RecommendationScreen> {
     );
   }
 }
+

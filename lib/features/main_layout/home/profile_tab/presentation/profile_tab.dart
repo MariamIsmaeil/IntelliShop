@@ -161,35 +161,35 @@ class ProfileTabState extends State<ProfileTab> {
                 hintTextStyle: getRegularStyle(color: ColorManager.primary)
                     .copyWith(fontSize: 18.sp),
               ),
-              SizedBox(height: AppSize.s50.h),
-              Text(
-                'My Orders',
-                style: getSemiBoldStyle(
-                    color: ColorManager.appBarTitleColor, fontSize: FontSize.s18),
-              ),
-              const SizedBox(height: 15),
-              Divider(thickness: 1, color: ColorManager.appBarTitleColor),
-              const SizedBox(height: 10),
-              if (isLoading)
-                Center(child: CircularProgressIndicator())
-              else if (orders.isEmpty)
-                Text(
-                  'No orders yet',
-                  style: getRegularStyle(color: ColorManager.primary),
-                )
-              else
-                ListView.builder(
-                  shrinkWrap: true,
-                  physics: NeverScrollableScrollPhysics(),
-                  itemCount: orders.length,
-                  itemBuilder: (context, index) {
-                    final order = orders[index];
-                    return OrderCard(
-                      order: order,
-                      onCancel: () => _cancelOrder(order.id.toString()),
-                    );
-                  },
-                ),
+              // SizedBox(height: AppSize.s50.h),
+              // Text(
+              //   'My Orders',
+              //   style: getSemiBoldStyle(
+              //       color: ColorManager.appBarTitleColor, fontSize: FontSize.s18),
+              // ),
+              // const SizedBox(height: 15),
+              // Divider(thickness: 1, color: ColorManager.appBarTitleColor),
+              // const SizedBox(height: 10),
+              // if (isLoading)
+              //   Center(child: CircularProgressIndicator())
+              // else if (orders.isEmpty)
+              //   Text(
+              //     'No orders yet',
+              //     style: getRegularStyle(color: ColorManager.primary),
+              //   )
+              // else
+              //   ListView.builder(
+              //     shrinkWrap: true,
+              //     physics: NeverScrollableScrollPhysics(),
+              //     itemCount: orders.length,
+              //     itemBuilder: (context, index) {
+              //       final order = orders[index];
+              //       return OrderCard(
+              //         order: order,
+              //         onCancel: () => _cancelOrder(order.id.toString()),
+              //       );
+              //     },
+              //   ),
             ],
           ),
         ),
