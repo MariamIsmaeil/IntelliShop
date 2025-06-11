@@ -135,8 +135,11 @@ class ProductDetails extends StatelessWidget {
                             ProductsCubit.get(context).AddProductToCart(
                                 product.id!, quantity.toString());
                             CartCubit.get(context).getCart();
-                            ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-                                content: Text('the item added successefly')));
+                            ScaffoldMessenger.of(context).showSnackBar(
+                              SnackBar(
+                                content: Text('the item added successefly'),
+                                backgroundColor: ColorManager.primary,
+                                ));
                           },
                           prefixIcon: Icon(
                             Icons.add_shopping_cart_outlined,

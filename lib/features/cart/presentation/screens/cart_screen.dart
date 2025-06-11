@@ -78,7 +78,7 @@ class CartScreen extends StatelessWidget {
                       ),
                     ),
                     TotalPriceAndCheckoutBotton(
-                      cartProducts: cartProducts,
+                      cartItems: cartItems,
                       checkoutButtonOnTap: () {
                         Navigator.push(
                           context,
@@ -101,7 +101,7 @@ class CartScreen extends StatelessWidget {
                                       price * (1 - discount / 100);
                                   return sum +
                                       discountedPrice; // بس مرة واحدة لكل منتج
-                                }),
+                                }), cartItems: [],
                               ),
                             ),
                           ),

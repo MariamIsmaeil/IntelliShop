@@ -2,6 +2,7 @@ import 'package:ecommerce_app/core/resources/color_manager.dart';
 import 'package:ecommerce_app/core/resources/styles_manager.dart';
 import 'package:ecommerce_app/core/resources/values_manager.dart';
 import 'package:ecommerce_app/core/widget/custom_elevated_button.dart';
+import 'package:ecommerce_app/features/products_screen/data/model/AddCart/CartitemModel.dart';
 import 'package:ecommerce_app/features/products_screen/domain/entity/ProductEntity.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -9,26 +10,27 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 class TotalPriceAndCheckoutBotton extends StatelessWidget {
   const TotalPriceAndCheckoutBotton({
     super.key,
-    required this.cartProducts,
+    required this.cartItems,
     required this.checkoutButtonOnTap,
   });
 
-  final List<ProductEntity> cartProducts;
+  final List<CartItemModel> cartItems;
+
   final void Function() checkoutButtonOnTap;
 
   double _calculateTotalPrice() {
   double total = 0.0;
 
-  for (var product in cartProducts) {
-    final price = product.price ?? 0.0;
-    final discount =
-        double.tryParse(product.discountInPercentage ?? "0") ?? 0.0;
+  for (var item in cartItems) {
+    final price = item.product?.price ?? 0.0;
+    final discount = double.tryParse(item.product?.discountInPercentage ?? "0") ?? 0.0;
     final discountedPrice = price * (1 - discount / 100);
-    total += discountedPrice; // نضيفه مرة واحدة بس
+    total += discountedPrice * 1;
   }
 
   return total;
 }
+
 
 
   @override

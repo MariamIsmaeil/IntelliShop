@@ -53,14 +53,14 @@ class _RecommendationScreenState extends State<RecommendationScreen> {
             ScaffoldMessenger.of(context).showSnackBar(
               SnackBar(
                 content: Text(state.message),
-                backgroundColor: Colors.green,
+                backgroundColor: ColorManager.primary,
               ),
             );
           } else if (state is AlreadyInWishlistState) {
             ScaffoldMessenger.of(context).showSnackBar(
               SnackBar(
                 content: Text(state.message),
-                backgroundColor: Colors.orange,
+                backgroundColor: ColorManager.primary,
               ),
             );
           } else if (state is AddWishListErrorState || state is RemoveWishListErrorState) {
@@ -69,14 +69,14 @@ class _RecommendationScreenState extends State<RecommendationScreen> {
                 content: Text(
                   state is AddWishListErrorState ? state.error : (state as RemoveWishListErrorState).error,
                 ),
-                backgroundColor: Colors.red,
+                backgroundColor: ColorManager.primary,
               ),
             );
           } else if (state is RemoveWishListSuccessState) {
             ScaffoldMessenger.of(context).showSnackBar(
               SnackBar(
                 content: Text(state.message),
-                backgroundColor: Colors.blue,
+                backgroundColor: ColorManager.primary,
               ),
             );
           }

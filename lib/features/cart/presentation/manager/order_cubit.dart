@@ -1,5 +1,6 @@
 import 'package:bloc/bloc.dart';
 import 'package:ecommerce_app/features/cart/data/model/order_model.dart';
+import 'package:ecommerce_app/features/products_screen/data/model/AddCart/CartitemModel.dart';
 import 'package:flutter/foundation.dart';
 import 'package:injectable/injectable.dart';
 
@@ -32,6 +33,7 @@ class OrderCubit extends Cubit<OrderState> {
     required String addressOne,
     required String addressTwo,
     required String postalCode,
+    required List<CartItemModel> cartItems,
   }) async {
     emit(OrderLoading());
     try {
@@ -43,6 +45,7 @@ class OrderCubit extends Cubit<OrderState> {
         addressOne: addressOne,
         addressTwo: addressTwo,
         postalCode: postalCode,
+        cartItems: cartItems,
       );
       emit(OrderCheckoutSuccess(response));
     } catch (e) {

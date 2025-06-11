@@ -4,6 +4,7 @@ import 'package:ecommerce_app/core/network/endpoint.dart';
 import 'package:ecommerce_app/core/network/InternetChecker.dart';
 import 'package:ecommerce_app/features/cart/data/model/order_model.dart';
 import 'package:ecommerce_app/features/cart/domain/repo/order_repository.dart';
+import 'package:ecommerce_app/features/products_screen/data/model/AddCart/CartitemModel.dart';
 import 'package:injectable/injectable.dart';
 
 @Injectable(as: OrderRepository)
@@ -13,35 +14,42 @@ class OrderRepositoryImpl implements OrderRepository {
 
   OrderRepositoryImpl(this.apiManager);
 
-  @override
-  Future<CheckoutResponseModel> checkout({
-    required String firstName,
-    required String lastName,
-    required String email,
-    required String phoneNumber,
-    required String addressOne,
-    required String addressTwo,
-    required String postalCode,
-  }) async {
-    try {
-      final response = await apiManager.PostRequestRawData(
-        Endpoint.checkoutEndpoint,
-        body: {
-          'first_name': firstName,
-          'last_name': lastName,
-          'email': email,
-          'phone_number': phoneNumber,
-          'address_one': addressOne,
-          'address_two': addressTwo,
-          'postal_code': postalCode,
-        },
-      );
-      return CheckoutResponseModel.fromJson(response.data);
-    } catch (e) {
-      // You can log or rethrow with a custom exception
-      throw Exception('Checkout failed: $e');
-    }
+ @override
+Future<CheckoutResponseModel> checkout({
+  required String firstName,
+  required String lastName,
+  required String email,
+  required String phoneNumber,
+  required String addressOne,
+  required String addressTwo,
+  required String postalCode,
+  required List<CartItemModel> cartItems,
+}) async {
+  try {
+    final products = cartItems.map((item) => {
+      'product_id': item.product?.id ?? item.id, // Use either product id or item id
+      'brand_id': item.brand?.id, // Include brand_id if needed
+      'quantity': 1, // Fixed quantity of 1
+    }).toList();
+
+    final response = await apiManager.PostRequestRawData(
+      Endpoint.checkoutEndpoint,
+      body: {
+        'first_name': firstName,
+        'last_name': lastName,
+        'email': email,
+        'phone_number': phoneNumber,
+        'address_one': addressOne,
+        'address_two': addressTwo,
+        'postal_code': postalCode,
+        'products': products,
+      },
+    );
+    return CheckoutResponseModel.fromJson(response.data);
+  } catch (e) {
+    throw Exception('Checkout failed: $e');
   }
+}
 
   @override
   Future<List<OrderModel>> getOrders() async {

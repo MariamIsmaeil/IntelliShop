@@ -122,7 +122,7 @@ class CustomProductWidget extends StatelessWidget {
                             SnackBar(
                               content:
                                   Text("The Product is successfully added"),
-                              backgroundColor: ColorManager.appBarTitleColor,
+                              backgroundColor: ColorManager.primary,
                               duration: Duration(seconds: 2),
                             ),
                           );

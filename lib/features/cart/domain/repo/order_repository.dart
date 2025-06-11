@@ -1,5 +1,6 @@
 import 'package:dartz/dartz.dart';
 import 'package:ecommerce_app/features/cart/data/model/order_model.dart';
+import 'package:ecommerce_app/features/products_screen/data/model/AddCart/CartitemModel.dart';
 import 'package:injectable/injectable.dart';
 
 abstract class OrderRepository {
@@ -11,6 +12,7 @@ abstract class OrderRepository {
     required String addressOne,
     required String addressTwo,
     required String postalCode,
+    required List<CartItemModel> cartItems,
   });
 
   Future<List<OrderModel>> getOrders();
